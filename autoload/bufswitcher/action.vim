@@ -4,15 +4,27 @@
 
 " Functions for actions {{{
 
+" Execute the specified action. All actions first
+" show buffer list in statusline.
 function! bufswitcher#action#execute(action, ...)
-  " TODO: Execute the specified action.
+  let actions = g:bufswitcher#action#actions
+  if ! has_key(actions, a:action)
+    echoerr "The '" . a:action . "' action doesn't exist."
+    return
+  endif
+
+  call bufswitcher#show_group()
+  let buflister = bufswitcher#get_current_buflister()
+  let args      = extend([buflister], a:000)
+  let Action    = actions[a:action]
+  call call(Action, args, actions)
 endfunction
 
 " }}}
 
 " Default actions {{{
 
-" The dictionary which stores functions to operate buffers list.
+" The dictionary which stores functions to operate buffer list.
 let bufswitcher#action#actions = {}
 let s:actions = bufswitcher#action#actions
 

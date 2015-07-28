@@ -63,6 +63,13 @@ function! bufswitcher#new_buflister(title, bufnrs, ...)
     \ }, s:Buflister)
 endfunction
 
+" Get copy of the currently shown buflister if it exists.
+function! bufswitcher#get_current_buflister()
+  if s:bsw.is_shown()
+    return deepcopy(s:bsw.current)
+  endif
+endfunction
+
 " }}}
 
 " Show and hide buffer list {{{

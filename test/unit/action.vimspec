@@ -1,5 +1,6 @@
 " Tests for actions
 
+let s:assert = themis#helper('assert')
 let s:expect = themis#helper('expect')
 
 Describe Action:
@@ -30,6 +31,12 @@ Describe Action:
     call g:Utils.wipeout_all(s:bufnrs)
   End
 
+
+  It executes an action of the specified name
+    call bufswitcher#action#execute('refresh', 0)
+    call s:expect(s:mock_actions).to_be_called('refresh', [0])
+    call s:assert.true(bufswitcher#is_shown(), 'All actions show buffer list in statusline first.')
+  End
 
   Context .refresh()
     It refreshes buffer list in statusline
