@@ -6,10 +6,13 @@ let s:expect = themis#helper('expect')
 Describe Action:
   Before all
     let s:actions = g:bufswitcher#action#actions
+    let s:mock_actions = g:Utils.make_mock_actions()
+    let g:bufswitcher#action#actions = s:mock_actions
   End
 
   After all
-    unlet s:actions s:bufnrs s:buflister
+    unlet s:actions s:mock_actions
+    unlet s:bufnrs s:buflister
   End
 
   Before each
@@ -29,6 +32,7 @@ Describe Action:
   After each
     call bufswitcher#hide()
     call g:Utils.wipeout_all(s:bufnrs)
+    call s:mock_actions._clear()
   End
 
 
@@ -50,4 +54,22 @@ Describe Action:
     End
   End
 
+  Context .switch_to()
+    It swithes to the specified buffer
+      let new_bufnr = s:bufnrs[1]
+      call s:actions.switch_to(s:buflister, new_bufnr)
+
+      call s:expect(bufnr('%')).to_equal(new_bufnr)
+      call s:expect(s:buflister.selected_nr).to_equal(new_bufnr)
+      call s:expect(s:mock_actions).to_be_called('refresh', [1])
+    End
+
+    It restores statusline of the previous buffer
+      let before_bufnr = s:bufnrs[0]
+      call s:actions.switch_to(s:buflister, s:bufnrs[1])
+
+      execute 'buffer' before_bufnr
+      call s:expect(&statusline).to_equal('previous-statusline')
+    End
+  End
 End

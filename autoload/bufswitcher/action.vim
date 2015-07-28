@@ -34,6 +34,14 @@ function! s:actions.refresh(buflister, is_new_buffer)
   call bufswitcher#replace_statusline(new_statusline, a:is_new_buffer)
 endfunction
 
+" Open the specified buffer. It continues showing buffer list.
+function! s:actions.switch_to(buflister, bufnr) dict
+  call bufswitcher#restore_prev_statusline(a:buflister.selected_nr)
+  call a:buflister.select(a:bufnr)
+  silent execute 'buffer' a:bufnr
+  call g:bufswitcher#action#actions.refresh(a:buflister, 1)
+endfunction
+
 unlet s:actions
 
 " }}}
