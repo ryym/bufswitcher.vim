@@ -34,4 +34,22 @@ Describe Buflister:
     let buflister = bufswitcher#new_buflister('', [this_bufnr], -100)
     call s:assert.equals(buflister.selected_nr, this_bufnr)
   End
+
+  It returns a bufnr which is ahead of the current one
+    let buflister = bufswitcher#new_buflister('bufnrs', s:bufnrs, s:bufnrs[0])
+    call s:assert.equals(buflister.bufnrs, s:bufnrs)
+    call s:assert.equals(buflister.get_next_bufnr(1), s:bufnrs[1])
+    call s:assert.equals(buflister.get_next_bufnr(2), s:bufnrs[2])
+    call s:assert.equals(buflister.get_next_bufnr(3), s:bufnrs[0])
+    call s:assert.equals(buflister.get_next_bufnr(4), s:bufnrs[1])
+  End
+
+  It returns a bufnr which is behind the current one
+    let buflister = bufswitcher#new_buflister('bufnrs', s:bufnrs, s:bufnrs[2])
+    call s:assert.equals(buflister.bufnrs, s:bufnrs)
+    call s:assert.equals(buflister.get_next_bufnr(-1), s:bufnrs[1])
+    call s:assert.equals(buflister.get_next_bufnr(-2), s:bufnrs[0])
+    call s:assert.equals(buflister.get_next_bufnr(-3), s:bufnrs[2])
+    call s:assert.equals(buflister.get_next_bufnr(-4), s:bufnrs[1])
+  End
 End

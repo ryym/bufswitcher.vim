@@ -47,6 +47,14 @@ function! s:Buflister.select(bufnr) dict
   let self.selected_nr = a:bufnr
 endfunction
 
+" Return a bufnr which is ahead of or behind the currently selected one
+" by the specified number of indexes.
+function! s:Buflister.get_next_bufnr(step) dict
+  let current_nr_idx = index(self.bufnrs, self.selected_nr)
+  let next_nr_idx    = (current_nr_idx + a:step) % len(self.bufnrs)
+  return self.bufnrs[next_nr_idx]
+endfunction
+
 " Create a new Buflister object.
 function! bufswitcher#new_buflister(title, bufnrs, ...)
   let bufnames = {}
