@@ -1,0 +1,46 @@
+" Tests for actions
+
+let s:expect = themis#helper('expect')
+
+Describe Action:
+  Before all
+    let s:actions = g:bufswitcher#action#actions
+  End
+
+  After all
+    unlet s:actions s:bufnrs s:buflister
+  End
+
+  Before each
+    let s:bufnrs = []
+    call add(s:bufnrs, g:Utils.tmp_buffer('b1'))
+    call add(s:bufnrs, g:Utils.tmp_buffer('b2'))
+    call add(s:bufnrs, g:Utils.tmp_buffer('b3'))
+    call add(s:bufnrs, g:Utils.tmp_buffer('b4'))
+    call add(s:bufnrs, g:Utils.tmp_buffer('b5'))
+
+    execute 'buffer' s:bufnrs[0]
+    let &statusline = 'previous-statusline'
+    let s:buflister = bufswitcher#new_buflister('test-buffers', s:bufnrs, s:bufnrs[0])
+    call bufswitcher#show(s:buflister)
+  End
+
+  After each
+    call bufswitcher#hide()
+    call g:Utils.wipeout_all(s:bufnrs)
+  End
+
+
+  Context .refresh()
+    It refreshes buffer list in statusline
+      let current_stl = bufswitcher#make_statusline(s:buflister)
+      call s:expect(&statusline).to_equal(current_stl)
+
+      call s:buflister.select(s:bufnrs[1])
+      let new_stl = bufswitcher#make_statusline(s:buflister)
+      call s:actions.refresh(s:buflister, 0)
+      call s:expect(&statusline).to_equal(new_stl)
+    End
+  End
+
+End

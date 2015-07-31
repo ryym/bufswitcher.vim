@@ -42,6 +42,11 @@ let s:configs = g:bufswitcher_configs
 " to display buffer list in statusline.
 let s:Buflister = {}
 
+" Select the specified buffer number.
+function! s:Buflister.select(bufnr) dict
+  let self.selected_nr = a:bufnr
+endfunction
+
 " Create a new Buflister object.
 function! bufswitcher#new_buflister(title, bufnrs, ...)
   let bufnames = {}
