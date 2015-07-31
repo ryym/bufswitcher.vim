@@ -8,4 +8,27 @@ call themis#helper('command')
 
 " }}}
 
+" Test utilities {{{
+
+let g:Utils = {}
+
+" Open a temporary buffer and return its buffer number.
+function! Utils.tmp_buffer(name, ...)
+  execute 'edit' a:name
+  let another_command = get(a:, '1', '')
+  if ! empty(another_command)
+    execute another_command
+  endif
+  return bufnr('%')
+endfunction
+
+" Wipeout all specified buffers.
+function! Utils.wipeout_all(bufnrs)
+  for bufnr in a:bufnrs
+    execute 'bwipeout' bufnr
+  endfor
+endfunction
+
+" }}}
+
 " vim: foldmethod=marker
