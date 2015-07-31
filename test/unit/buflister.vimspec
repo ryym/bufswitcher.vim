@@ -1,0 +1,37 @@
+" Tests for Buflister object
+
+let s:assert = themis#helper('assert')
+
+Describe Buflister:
+  Before each
+    let s:bufnrs = []
+    call add(s:bufnrs, g:Utils.tmp_buffer('b1'))
+    call add(s:bufnrs, g:Utils.tmp_buffer('b2'))
+    call add(s:bufnrs, g:Utils.tmp_buffer('b3'))
+  End
+
+  After each
+    call g:Utils.wipeout_all(s:bufnrs)
+  End
+
+
+  It has fields used to write statusline
+    let this_bufnr   = bufnr('%')
+    let this_bufname = fnamemodify(bufname('%'), ':t')
+    let buflister    = bufswitcher#new_buflister('TITLE', [this_bufnr], this_bufnr)
+    call s:assert.equals(buflister.title, 'TITLE')
+    call s:assert.equals(buflister.bufnrs, [this_bufnr])
+    call s:assert.equals(buflister.bufnames[this_bufnr], this_bufname)
+    call s:assert.equals(buflister.selected_nr, this_bufnr)
+  End
+
+  It selects the current bufnr by default
+    let this_bufnr = bufnr('%')
+
+    let buflister = bufswitcher#new_buflister('', [this_bufnr])
+    call s:assert.equals(buflister.selected_nr, this_bufnr)
+
+    let buflister = bufswitcher#new_buflister('', [this_bufnr], -100)
+    call s:assert.equals(buflister.selected_nr, this_bufnr)
+  End
+End

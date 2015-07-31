@@ -1,0 +1,37 @@
+" Tests for manipulation of statusline
+
+let s:expect = themis#helper('expect')
+
+Describe Statusline Editing:
+  Before each
+    let &statusline = 'CURRENT-STATUSLINE'
+    unlet! b:bufswitcher_prev_statusline
+  End
+
+  It saves previous statusline if necessary
+    let prev_statusline = &statusline
+    let new_statusline  = 'new-statusline'
+    call bufswitcher#replace_statusline(new_statusline, 1)
+    call s:expect(&statusline).to_equal(new_statusline)
+    call s:expect(b:bufswitcher_prev_statusline).to_equal(b:bufswitcher_prev_statusline)
+  End
+
+  It doesn't save previous statusline if unnecessary
+    let prev_statusline = &statusline
+    let new_statusline  = 'new-statusline'
+    call bufswitcher#replace_statusline(new_statusline, 0)
+    call s:expect(&statusline).to_equal(new_statusline)
+    call s:expect('b:bufswitcher_prev_statusline').not.to_exist()
+  End
+
+  It restores previous statusline
+    let this_bufnr = bufnr('%')
+    let prev_statusline = &statusline
+    call bufswitcher#save_current_statusline()
+
+    let &statusline = 'new-statusline'
+    call bufswitcher#restore_prev_statusline(this_bufnr)
+    call s:expect(&statusline).to_equal(prev_statusline)
+    call s:expect('b:bufswitcher_prev_statusline').not.to_exist()
+  End
+End
