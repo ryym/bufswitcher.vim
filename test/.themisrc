@@ -1,0 +1,11 @@
+" Test settings
+
+" Themis settings {{{
+
+call themis#option('recursive', 1)
+call themis#option('reporter', 'spec')
+call themis#helper('command')
+
+" }}}
+
+" vim: foldmethod=marker
