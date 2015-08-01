@@ -36,6 +36,9 @@ endfunction
 
 " Open the specified buffer. It continues showing buffer list.
 function! s:actions.switch_to(buflister, bufnr) dict
+  if a:buflister.selected_nr == a:bufnr
+    return
+  endif
   call bufswitcher#restore_prev_statusline(a:buflister.selected_nr)
   call a:buflister.select(a:bufnr)
   silent execute 'buffer' a:bufnr
