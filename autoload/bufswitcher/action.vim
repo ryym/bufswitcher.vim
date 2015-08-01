@@ -40,6 +40,7 @@ function! s:actions.switch_to(buflister, bufnr) dict
   call a:buflister.select(a:bufnr)
   silent execute 'buffer' a:bufnr
   call g:bufswitcher#action#actions.refresh(a:buflister, 1)
+  call bufswitcher#_states().skip_next_autoclose()
 endfunction
 
 " Go to previous buffer in buffer list.

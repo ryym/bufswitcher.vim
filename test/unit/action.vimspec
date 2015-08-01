@@ -62,6 +62,7 @@ Describe Action:
       call s:expect(bufnr('%')).to_equal(new_bufnr)
       call s:expect(s:buflister.selected_nr).to_equal(new_bufnr)
       call s:expect(s:mock_actions).to_be_called('refresh', [1])
+      call s:assert.true(bufswitcher#_states().will_skip_next_autoclose, 'Skip next autoclose')
     End
 
     It restores statusline of the previous buffer
