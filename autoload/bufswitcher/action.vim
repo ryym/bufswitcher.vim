@@ -14,7 +14,7 @@ function! bufswitcher#action#execute(action, ...)
   endif
 
   call bufswitcher#show_group()
-  let buflister = bufswitcher#get_current_buflister()
+  let buflister = bufswitcher#_states().current_buflister
   let args      = extend([buflister], a:000)
   let Action    = actions[a:action]
   call call(Action, args, actions)

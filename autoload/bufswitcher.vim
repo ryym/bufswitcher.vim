@@ -71,13 +71,6 @@ function! bufswitcher#new_buflister(title, bufnrs, ...)
     \ }, s:Buflister)
 endfunction
 
-" Get copy of the currently shown buflister if it exists.
-function! bufswitcher#get_current_buflister()
-  if s:bsw.is_shown()
-    return deepcopy(s:bsw.current)
-  endif
-endfunction
-
 " }}}
 
 " Show and hide buffer list {{{
@@ -99,7 +92,7 @@ endfunction
 
 " Show buffer list.
 function! bufswitcher#show(buflister)
-  let s:bsw.current  = a:buflister
+  call bufswitcher#_states().set_current_buflister(a:buflister)
   let new_statusline = bufswitcher#make_statusline(a:buflister)
   call bufswitcher#replace_statusline(new_statusline, 1)
 
@@ -125,18 +118,19 @@ function! bufswitcher#hide()
   augroup bufswitcher
     autocmd!
   augroup END
-  call s:bsw.clear_current_buflister()
+  call bufswitcher#_states().clear_current_buflister()
 endfunction
 
 " Return non-zero if buffer list is shown in statusline.
 function! bufswitcher#is_shown()
-  return s:bsw.is_shown()
+  return bufswitcher#_states().is_shown()
 endfunction
 
 " An event to hide buffer list automatically.
 function! s:on_actions_while_opened()
-  if s:bsw.states.in_operation
-    let s:bsw.states.in_operation = 0
+  let states = bufswitcher#_states()
+  if states.will_skip_next_autoclose
+    let states.will_skip_next_autoclose = 0
     return
   endif
   call bufswitcher#hide()
@@ -198,21 +192,34 @@ endfunction
 
 " }}}
 
-" Work object {{{
+" State object {{{
 
-let s:bsw = {
-  \ 'states' : {
-  \   'in_operation' : 0
-  \   }
-  \ }
-
-function! s:bsw.clear_current_buflister() dict
-  let self.states.in_operation = 0
-  unlet! self.current
+" Get a state object.
+function! bufswitcher#_states()
+  return s:_states
 endfunction
 
-function! s:bsw.is_shown() dict
-  return has_key(self, 'current')
+let s:_states = {}
+
+" If this flag is on, next autoclose event will be skipped.
+" So statusline continues showing buffer list.
+let s:_states.will_skip_next_autoclose = 0
+
+function! s:_states.skip_next_autoclose() dict
+  let self.will_skip_next_autoclose = 1
+endfunction
+
+function! s:_states.set_current_buflister(buflister) dict
+  let self.current_buflister = a:buflister
+endfunction
+
+function! s:_states.clear_current_buflister() dict
+  let self.will_skip_next_autoclose = 0
+  unlet! self.current_buflister
+endfunction
+
+function! s:_states.is_shown() dict
+  return has_key(self, 'current_buflister')
 endfunction
 
 " }}}
