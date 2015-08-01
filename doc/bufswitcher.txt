@@ -1,0 +1,212 @@
+*bufswitcher.txt*	Easy buffer switcher using statusline
+
+Version: 0.0.1
+Author: ryym <ryym64@gmail.com>
+
+==============================================================================
+CONTENTS						*bufswitcher-contents*
+
+Introduction				|bufswitcher-introduction|
+Usage					|bufswitcher-usage|
+Interface				|bufswitcher-interface|
+  Configs				|bufswitcher-configs|
+  Commands			    	|bufswitcher-commands|
+  Functions				|bufswitcher-functions|
+Buffer Groups				|bufswitcher-groups|
+Actions in statusline			|bufswitcher-actions|
+Using with vim-submode			|bufswitcher-with-submode|
+Changelog				|bufswitcher-changelog|
+
+
+==============================================================================
+INTRODUCTION						*bufswitcher-introduction*
+
+*bufswitcher* is a Vim plugin to switch buffers instantly using statusline.
+This plugin allows you to display buffer names in statusline while you want to.
+By displaying buffer list only while switching buffers, you can use this plugin
+with any other plugins which customize statusline.  
+
+When many buffers are opened, other great plugins like |unite| or |ctrlp| are more
+useful. But when there are a few buffers, bufswitcher is convenient because
+it opens no new window.
+
+
+==============================================================================
+USAGE							*bufswitcher-usage*
+
+The settings below is an example. By default, buffer list will close
+automatically when the cursor moved. >
+
+	nmap <Leader>b  <Plug>(bufswitcher-show)
+	nmap ]b  <Plug>(bufswitcher-next)
+	nmap [b  <Plug>(bufswitcher-prev)
+
+
+==============================================================================
+INTERFACE						*bufswitcher-interface*
+
+------------------------------------------------------------------------------
+CONFIGS							*bufswitcher-configs*
+
+*g:bufswitcher_configs* is a dictionary that has all variables for
+configuration of bufswitcher.
+
+					*g:bufswitcher_configs.current_group*
+g:bufswithcer_configs.current_group
+default: "listed"
+		When |:BufswitcherShow| is called with no arguments, the
+		value of this variable will be used. And the value of
+		this is updated every time when |:BufswitcherShow| is called.
+		See |bufswitcher-groups| for default groups.
+		
+					*g:bufswitcher_configs.auto_close*
+g:bufswitcher_configs.auto_close
+default: 1
+		If the value is non-zero, the buffer list in statusline will close
+		automatically by the events below.
+		Event: |CursorMoved|, |InsertEnter|, |CursorHold|
+
+
+------------------------------------------------------------------------------
+COMMANDS						*bufswitcher-commands*
+
+:BufswitcherShow [{group}]				*:BufswitcherShow*
+		Display buffer list in statusline which belongs to the specified group.
+		If {group} is omitted, the value of |g:bufswitcher_configs.current_group|
+		is used. See |bufswitcher-groups| for groups.
+
+:BufswitcherHide					*:BufswitcherHide*
+		Close buffer list and reset statusline to the previous one.
+
+:BufswitcherNext					*:BufswitcherNext*
+		Go to next buffer in buffer list. You can use this command
+		even if the buffer list isn't opened. In such a case, it
+		opens buffer list before switching. The next three commands
+		also work like this.
+
+:BufswitcherPrev					*:BufswitcherPrev*
+		Go to previous buffer in buffer list.
+
+:BufswitcherFirst					*:BufswitcherFirst*
+		Go to first buffer in buffer list.
+
+:BufswitcherLast					*:BufswitcherLast*
+		Go to last buffer in buffer list.
+
+:BufswitcherExec {action} [{arg}..]			*:BufswitcherExec*
+		Execute the specified action. See |bufswitcher-actions| for
+		actions.
+
+
+------------------------------------------------------------------------------
+FUNCTIONS						*bufswitcher-functions*
+
+					*bufswitcher#show_group()*
+bufswitcher#show_group([{group}])
+		Equivalent to |:BufswitcherShow|.
+
+					*bufswitcher#hide()*
+bufswitcher#hide()
+		Equivalent to |:BufswitcherHide|.
+
+					*bufswitcher#group#change_current_group()*
+bufswitcher#group#change_current_group({group})
+		Change the value of |g:bufswitcher_configs.current_group|
+		to the specified group.
+
+					*bufswitcher#action#execute()*
+bufswitcher#action#execute({action}, [{arg}...])
+		Equivalent to |:BufswitcherExec|.
+
+
+------------------------------------------------------------------------------
+KEY MAPPINGS						*bufswitcher-key-mappings*
+
+<Plug>(bufswitcher-show)				*<Plug>(bufswitcher-show)*
+		Execute |:BufswitcherShow|.
+
+<Plug>(bufswitcher-hide)				*<Plug>(bufswitcher-hide)*
+		Execute |:BufswitcherHide|.
+
+<Plug>(bufswitcher-next)				*<Plug>(bufswitcher-next)*
+		Execute |:BufswitcherNext|.
+
+<Plug>(bufswitcher-prev)				*<Plug>(bufswitcher-prev)*
+		Execute |:BufswitcherPrev|.
+
+<Plug>(bufswitcher-first)				*<Plug>(bufswitcher-first)*
+		Execute |:BufswitcherFirst|.
+
+<Plug>(bufswitcher-last)				*<Plug>(bufswitcher-last)*
+		Execute |:BufswitcherLast|.
+
+
+==============================================================================
+GROUPS							*bufswitcher-groups*
+
+About~
+	There are some groups which can be displayed in statusline. All groups
+	are registered as functions in the dictionary named bufswitcher#group#groups.
+	To display buffers which belongs to a specific group, pass the group name to
+	the |:BufswitcherShow| command.
+
+Default groups~
+
+.all()							*bufswitcher-groups-all*
+		Lists all existing buffers including 'nobuflisted' buffers.
+
+.listed()						*bufswitcher-groups-listed*
+		Lists all buffers which has the 'buflisted' option like the |:ls|
+		command.
+
+
+==============================================================================
+ACTIONS							*bufswitcher-actions*
+
+About~
+	All actions for buffer list in statusline are registered in the
+	dictionary named bufswitcher#action#actions. To execute an action,
+	call |:BufswitcherExec|. Each action opens buffer list before its execution
+	so you can do an action even if the buffer list is not opened.
+
+Default actions~
+
+.go_next()					*bufswitcher-actions-go_next*
+		Go to next buffer in buffer list.
+
+.go_prev()					*bufswitcher-actions-go_prev*
+		Go to previous buffer in buffer list.
+
+.go_first()					*bufswitcher-actions-go_first*
+		Go to first buffer in buffer list.
+
+.go_last()					*bufswitchr-actions-go_last*
+		Go to last buffer in buffer list.
+
+.switch_to({bufnr})				*bufswitcher-actions-switch_to*
+		Open a buffer of the specified number.
+
+
+==============================================================================
+WITH VIM-SUBMODE					*bufswitcher-with-submode*
+
+Vim plugin |submode| makes it more useful to use bufswitcher.
+https://github.com/kana/vim-submode
+
+For example, by the setting below, You can open buffer list by <Space>b,
+switch the buffer by h and l, and exit submode by any other keys. >
+
+	call submode#enter_with('bsw', 'n', 'r', '<Space>b', '<Plug>(bufswitcher-show)')
+	call submode#map('bsw', 'n', 'r', 'h', '<Plug>(bufswitcher-prev)')
+	call submode#map('bsw', 'n', 'r', 'l', '<Plug>(bufswitcher-next)')
+
+
+==============================================================================
+CHAGNELOG						*bufswitcher-changelog*
+
+0.0.1	2015-08-01
+	Initial version.
+
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:fen:fdl=0:fdm=marker:
