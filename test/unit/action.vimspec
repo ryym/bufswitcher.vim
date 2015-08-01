@@ -1,0 +1,118 @@
+" Tests for actions
+
+let s:assert = themis#helper('assert')
+let s:expect = themis#helper('expect')
+
+Describe Action:
+  Before all
+    let s:actions = g:bufswitcher#action#actions
+    let s:mock_actions = g:Utils.make_mock_actions()
+    let g:bufswitcher#action#actions = s:mock_actions
+  End
+
+  After all
+    unlet s:actions s:mock_actions
+    unlet s:bufnrs s:buflister
+  End
+
+  Before each
+    let s:bufnrs = []
+    call add(s:bufnrs, g:Utils.tmp_buffer('b1'))
+    call add(s:bufnrs, g:Utils.tmp_buffer('b2'))
+    call add(s:bufnrs, g:Utils.tmp_buffer('b3'))
+    call add(s:bufnrs, g:Utils.tmp_buffer('b4'))
+    call add(s:bufnrs, g:Utils.tmp_buffer('b5'))
+
+    execute 'buffer' s:bufnrs[0]
+    let &statusline = 'previous-statusline'
+    let s:buflister = bufswitcher#new_buflister('test-buffers', s:bufnrs, s:bufnrs[0])
+    call bufswitcher#show(s:buflister)
+  End
+
+  After each
+    call bufswitcher#hide()
+    call g:Utils.wipeout_all(s:bufnrs)
+    call s:mock_actions._clear()
+  End
+
+
+  It executes an action of the specified name
+    call bufswitcher#action#execute('refresh', 0)
+    call s:expect(s:mock_actions).to_be_called('refresh', [0])
+    call s:assert.true(bufswitcher#is_shown(), 'All actions show buffer list in statusline first.')
+  End
+
+  Context .refresh()
+    It refreshes buffer list in statusline
+      let current_stl = bufswitcher#make_statusline(s:buflister)
+      call s:expect(&statusline).to_equal(current_stl)
+
+      call s:buflister.select(s:bufnrs[1])
+      let new_stl = bufswitcher#make_statusline(s:buflister)
+      call s:actions.refresh(s:buflister, 0)
+      call s:expect(&statusline).to_equal(new_stl)
+    End
+  End
+
+  Context .switch_to()
+    It swithes to the specified buffer
+      let new_bufnr = s:bufnrs[1]
+      call s:actions.switch_to(s:buflister, new_bufnr)
+
+      call s:expect(bufnr('%')).to_equal(new_bufnr)
+      call s:expect(s:buflister.selected_nr).to_equal(new_bufnr)
+      call s:expect(s:mock_actions).to_be_called('refresh', [1])
+      call s:assert.true(bufswitcher#_states().will_skip_next_autoclose, 'Skip next autoclose')
+    End
+
+    It restores statusline of the previous buffer
+      let before_bufnr = s:bufnrs[0]
+      call s:actions.switch_to(s:buflister, s:bufnrs[1])
+
+      execute 'buffer' before_bufnr
+      call s:expect(&statusline).to_equal('previous-statusline')
+    End
+  End
+
+  Context .go_prev()
+    It opens the previous buffer
+      let prev_bufnr = s:bufnrs[0]
+      let next_bufnr = s:bufnrs[1]
+      call s:actions.switch_to(s:buflister, next_bufnr)
+      call s:actions.go_prev(s:buflister)
+
+      call s:expect(s:mock_actions).to_be_called('switch_to', [prev_bufnr])
+    End
+  End
+
+  Context .go_next()
+    It opens the next buffer
+      let prev_bufnr = s:bufnrs[0]
+      let next_bufnr = s:bufnrs[1]
+      call s:actions.switch_to(s:buflister, prev_bufnr)
+      call s:actions.go_next(s:buflister)
+
+      call s:expect(s:mock_actions).to_be_called('switch_to', [next_bufnr])
+    End
+  End
+
+  Context .go_first()
+    It opens the first buffer
+      let first_bufnr = s:bufnrs[0]
+      call s:actions.switch_to(s:buflister, s:bufnrs[2])
+      call s:actions.go_first(s:buflister)
+
+      call s:expect(s:mock_actions).to_be_called('switch_to', [first_bufnr])
+    End
+  End
+
+  Context .go_last()
+    It opens the last buffer
+      let last_bufnr = s:bufnrs[-1]
+      call s:actions.switch_to(s:buflister, s:bufnrs[2])
+      call s:actions.go_last(s:buflister)
+
+      call s:expect(s:mock_actions).to_be_called('switch_to', [last_bufnr])
+    End
+  End
+End
