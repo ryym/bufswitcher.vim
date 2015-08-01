@@ -13,7 +13,7 @@ set cpo&vim
 
 " Return the current version of bufswitcher.vim.
 function! bufswitcher#version()
-  return '0.0.0'
+  return '0.0.1'
 endfunction
 
 " }}}
