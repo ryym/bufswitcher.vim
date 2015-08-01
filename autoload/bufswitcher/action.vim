@@ -42,6 +42,30 @@ function! s:actions.switch_to(buflister, bufnr) dict
   call g:bufswitcher#action#actions.refresh(a:buflister, 1)
 endfunction
 
+" Go to previous buffer in buffer list.
+function! s:actions.go_prev(buflister)
+  let prev_bufnr = a:buflister.get_next_bufnr(-1)
+  call g:bufswitcher#action#actions.switch_to(a:buflister, prev_bufnr)
+endfunction
+
+" Go to previous buffer in buffer list.
+function! s:actions.go_next(buflister)
+  let next_bufnr = a:buflister.get_next_bufnr(1)
+  call g:bufswitcher#action#actions.switch_to(a:buflister, next_bufnr)
+endfunction
+
+" Go to first buffer in buffer list.
+function! s:actions.go_first(buflister)
+  let first_bufnr = a:buflister.bufnrs[0]
+  call g:bufswitcher#action#actions.switch_to(a:buflister, first_bufnr)
+endfunction
+
+" Go to last buffer in buffer list.
+function! s:actions.go_last(buflister)
+  let last_bufnr = a:buflister.bufnrs[-1]
+  call g:bufswitcher#action#actions.switch_to(a:buflister, last_bufnr)
+endfunction
+
 unlet s:actions
 
 " }}}

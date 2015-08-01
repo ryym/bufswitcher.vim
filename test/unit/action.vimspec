@@ -72,4 +72,46 @@ Describe Action:
       call s:expect(&statusline).to_equal('previous-statusline')
     End
   End
+
+  Context .go_prev()
+    It opens the previous buffer
+      let prev_bufnr = s:bufnrs[0]
+      let next_bufnr = s:bufnrs[1]
+      call s:actions.switch_to(s:buflister, next_bufnr)
+      call s:actions.go_prev(s:buflister)
+
+      call s:expect(s:mock_actions).to_be_called('switch_to', [prev_bufnr])
+    End
+  End
+
+  Context .go_next()
+    It opens the next buffer
+      let prev_bufnr = s:bufnrs[0]
+      let next_bufnr = s:bufnrs[1]
+      call s:actions.switch_to(s:buflister, prev_bufnr)
+      call s:actions.go_next(s:buflister)
+
+      call s:expect(s:mock_actions).to_be_called('switch_to', [next_bufnr])
+    End
+  End
+
+  Context .go_first()
+    It opens the first buffer
+      let first_bufnr = s:bufnrs[0]
+      call s:actions.switch_to(s:buflister, s:bufnrs[2])
+      call s:actions.go_first(s:buflister)
+
+      call s:expect(s:mock_actions).to_be_called('switch_to', [first_bufnr])
+    End
+  End
+
+  Context .go_last()
+    It opens the last buffer
+      let last_bufnr = s:bufnrs[-1]
+      call s:actions.switch_to(s:buflister, s:bufnrs[2])
+      call s:actions.go_last(s:buflister)
+
+      call s:expect(s:mock_actions).to_be_called('switch_to', [last_bufnr])
+    End
+  End
 End
