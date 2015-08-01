@@ -93,7 +93,7 @@ function! bufswitcher#show_group(...)
   let buflister = bufswitcher#group#get_buflister_from(group)
   if ! empty(buflister)
     call bufswitcher#show(buflister)
-    call bufswitcher#group#change_current_group(buflister)
+    call bufswitcher#group#change_current_group(group)
   endif
 endfunction
 
