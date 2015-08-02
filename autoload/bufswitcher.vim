@@ -75,7 +75,7 @@ endfunction
 
 " Show and hide buffer list {{{
 
-" Show buffer list which belong to the specified group.
+" Show buffers which belong to the specified group.
 " If group name is omitted, show 'g:bufswitcher_config.current_group'.
 function! bufswitcher#show_group(...)
   if bufswitcher#is_shown()
@@ -164,7 +164,7 @@ function! bufswitcher#restore_prev_statusline(bufnr)
     endif
 endfunction
 
-" Get saved previous statusline if it's exists.
+" Get saved previous statusline if it exists.
 function! bufswitcher#get_prev_statusline(bufnr)
   return getbufvar(a:bufnr, 'bufswitcher_prev_statusline')
 endfunction
