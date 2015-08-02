@@ -2,6 +2,19 @@ runtime vspecrc.vim
 
 let s:default_configs = copy(g:bufswitcher_configs)
 
+
+describe 'Default settings'
+  it 'provides configuration dictionary with default values'
+    Expect exists('g:bufswitcher_configs') to_be_true
+
+    let configs = g:bufswitcher_configs
+    Expect len(configs) == 2
+    Expect configs.current_group ==# 'listed'
+    Expect configs.auto_close    ==  1
+  end
+end
+
+
 describe 'Basic functions:'
   after
     let g:bufswitcher_configs = copy(s:default_configs)
