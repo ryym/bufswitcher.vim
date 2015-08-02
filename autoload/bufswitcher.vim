@@ -29,13 +29,6 @@ highlight link BufswitcherSelected   Search
 
 " }}}
 
-" Configuration {{{
-
-" All options are stored in this dictionary.
-let s:configs = g:bufswitcher_configs
-
-" }}}
-
 " Buflister object {{{
 
 " Buflister is an object which has some informations and functions
@@ -81,7 +74,7 @@ function! bufswitcher#show_group(...)
   if bufswitcher#is_shown()
     return
   endif
-  let group = get(a:, '1', s:configs.current_group)
+  let group = get(a:, '1', g:bufswitcher_configs.current_group)
 
   let buflister = bufswitcher#group#get_buflister_from(group)
   if ! empty(buflister)
@@ -96,7 +89,7 @@ function! bufswitcher#show(buflister)
   let new_statusline = bufswitcher#make_statusline(a:buflister)
   call bufswitcher#replace_statusline(new_statusline, 1)
 
-  if s:configs.auto_close
+  if g:bufswitcher_configs.auto_close
     augroup bufswitcher
       autocmd CursorMoved,InsertEnter,CursorHold * call s:on_actions_while_opened()
     augroup END

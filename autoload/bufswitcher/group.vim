@@ -2,13 +2,11 @@
 " Maintainer: ryym <ryym64@gmail.com>
 " License: The file is placed in the public domain.
 
-let s:configs = g:bufswitcher_configs
-
 " Group operations {{{
 
 " Change the current group.
 function! bufswitcher#group#change_current_group(group)
-  let s:configs.current_group = a:group
+  let g:bufswitcher_configs.current_group = a:group
 endfunction
 
 " Get a Buflister created by the specified group.
