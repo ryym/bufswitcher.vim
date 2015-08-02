@@ -1,2 +1,5 @@
 /work/
+/.vim-flavor/
 tags*
+Gemfile.lock
+VimFlavor.lock
