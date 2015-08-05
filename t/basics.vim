@@ -8,9 +8,8 @@ describe 'Default settings'
     Expect exists('g:bufswitcher_configs') to_be_true
 
     let configs = g:bufswitcher_configs
-    Expect len(configs) == 2
+    Expect len(configs) == 1
     Expect configs.current_group ==# 'listed'
-    Expect configs.auto_close    ==  1
   end
 end
 

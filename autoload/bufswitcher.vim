@@ -89,11 +89,9 @@ function! bufswitcher#show(buflister)
   let new_statusline = bufswitcher#make_statusline(a:buflister)
   call bufswitcher#replace_statusline(new_statusline, 1)
 
-  if g:bufswitcher_configs.auto_close
-    augroup bufswitcher
-      autocmd CursorMoved,InsertEnter,CursorHold * call s:on_actions_while_opened()
-    augroup END
-  endif
+  augroup bufswitcher
+    autocmd CursorMoved,InsertEnter,CursorHold * call s:on_actions_while_opened()
+  augroup END
 endfunction
 
 " Hide (close) buffer list in statusline of all windows.
