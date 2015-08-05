@@ -152,7 +152,7 @@ function! bufswitcher#restore_prev_statusline(bufnr)
   let prev_statusline = bufswitcher#get_prev_statusline(a:bufnr)
     if ! empty(prev_statusline)
       silent execute 'buffer' a:bufnr
-      let &l:statusline = prev_statusline
+      let &statusline = prev_statusline
       unlet b:bufswitcher_prev_statusline
     endif
 endfunction
