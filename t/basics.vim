@@ -2,6 +2,12 @@ runtime vspecrc.vim
 
 let s:default_configs = copy(g:bufswitcher_configs)
 
+function! s:tmp_buffer(name, another_command)
+  let bufnr = g:Utils.tmp_buffer(a:name, a:another_command)
+  call add(s:tmp_bufnrs, bufnr)
+  return bufnr
+endfunction
+
 
 describe 'Default settings'
   it 'provides configuration dictionary with default values'
@@ -15,9 +21,14 @@ end
 
 
 describe 'Basic functions:'
+  before
+    let s:tmp_bufnrs = []
+  end
+
   after
     let g:bufswitcher_configs = copy(s:default_configs)
     call bufswitcher#hide()
+    call g:Utils.wipeout_all(s:tmp_bufnrs)
   end
 
 
@@ -45,6 +56,18 @@ describe 'Basic functions:'
 
       Expect bufswitcher#is_shown() to_be_true
       Expect g:bufswitcher_configs.current_group ==# 'listed'
+    end
+
+    it 'does nothing if the buffer list is already opened'
+      call bufswitcher#show_group()
+      Expect bufswitcher#is_shown() to_be_true
+
+      let another_bufnr = s:tmp_buffer('b1', '')
+      silent execute 'buffer' another_bufnr
+      let &statusline = 'another-buffer-statusline'
+      call bufswitcher#show_group()
+
+      Expect &statusline ==# 'another-buffer-statusline'
     end
   end
 
