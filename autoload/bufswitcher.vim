@@ -94,16 +94,16 @@ function! bufswitcher#show(buflister)
   augroup END
 endfunction
 
-" Hide (close) buffer list in statusline of all windows.
+" Hide (close) buffer list in statusline.
 function! bufswitcher#hide()
   if ! bufswitcher#is_shown()
     return
   endif
 
   let current_bufnr = bufnr('%')
-  for nr in filter( range(1, bufnr('$')), 'bufexists(v:val)' )
-    call bufswitcher#restore_prev_statusline(nr)
-  endfor
+  let opener_bufnr  = bufswitcher#_states().current_buflister.selected_nr
+
+  call bufswitcher#restore_prev_statusline(opener_bufnr)
   silent execute 'buffer' current_bufnr
 
   augroup bufswitcher
