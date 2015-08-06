@@ -72,8 +72,29 @@ describe 'Basic functions:'
   end
 
   describe '#hide()'
-    it 'restores statuslines of all buffers'
-      TODO
+    it 'restores statusline'
+      let &statusline = 'prev-statusline'
+      call bufswitcher#show_group()
+
+      call bufswitcher#hide()
+      Expect bufswitcher#is_shown() to_be_false
+      Expect &statusline ==# 'prev-statusline'
+    end
+
+    it 'restores statusline even if it opened in another buffer'
+      let &statusline   = 'prev-statusline'
+      let current_bufnr = bufnr('%')
+      call bufswitcher#show_group()
+
+      let bufnr = s:tmp_buffer('b', '')
+      silent execute 'buffer' bufnr
+      Expect bufswitcher#is_shown() to_be_true
+
+      call bufswitcher#hide()
+
+      Expect bufswitcher#is_shown() to_be_false
+      silent execute 'buffer' current_bufnr
+      Expect &statusline ==# 'prev-statusline'
     end
   end
 end
