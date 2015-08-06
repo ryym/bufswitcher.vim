@@ -35,8 +35,8 @@ Vimプラグインです。このプラグインを使えば、好きな時だ�
 ==============================================================================
 USAGE							*bufswitcher-usage*
 
-以下はマッピングの設定例です。デフォルトでは、バッファリストはカーソル移動
-のイベントによって自動で閉じるので、移動後すぐに編集を始める事ができます。 >
+以下はマッピングの設定例です。バッファリストはカーソル移動のイベントによって
+自動で閉じるので、移動後すぐに編集を始める事ができます。 >
 
 	nmap <Leader>b  <Plug>(bufswitcher-show)
 	nmap ]b  <Plug>(bufswitcher-next)
@@ -58,13 +58,6 @@ default: "listed"
 		グループのバッファを一覧表示します。ただしこの値は、
 		|:BufswitcherShow|を実行するたびに、表示したグループ名で更新
 		されます。グループについては|bufswitcher-groups|を参照して下さい。
-		
-					*g:bufswitcher_configs.auto_close*
-g:bufswitcher_configs.auto_close
-default: 1
-		この値が0でない場合、statsuline上のバッファリストは以下のイベントが
-		発生すると自動で閉じられます。
-		イベント：|CursorMoved|, |InsertEnter|, |CursorHold|
 
 
 ------------------------------------------------------------------------------

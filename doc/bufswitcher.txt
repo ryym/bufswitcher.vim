@@ -34,8 +34,8 @@ it opens no new window.
 ==============================================================================
 USAGE							*bufswitcher-usage*
 
-The settings below is an example. By default, buffer list will close
-automatically when the cursor moved. >
+The settings below is an example. Opened buffer list will close automatically
+when the cursor moved. >
 
 	nmap <Leader>b  <Plug>(bufswitcher-show)
 	nmap ]b  <Plug>(bufswitcher-next)
@@ -58,13 +58,6 @@ default: "listed"
 		value of this variable will be used. And the value of
 		this is updated every time when |:BufswitcherShow| is called.
 		See |bufswitcher-groups| for default groups.
-		
-					*g:bufswitcher_configs.auto_close*
-g:bufswitcher_configs.auto_close
-default: 1
-		If the value is non-zero, the buffer list in statusline will close
-		automatically by the events below.
-		Event: |CursorMoved|, |InsertEnter|, |CursorHold|
 
 
 ------------------------------------------------------------------------------
