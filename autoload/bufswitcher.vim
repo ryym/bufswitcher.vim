@@ -145,7 +145,7 @@ function! bufswitcher#save_current_statusline()
 endfunction
 
 " Restore the previous statusline from the buffer scope variable.
-" This open the specified buffer to restore.
+" This opens the specified buffer to restore.
 function! bufswitcher#restore_prev_statusline(bufnr)
   let prev_statusline = bufswitcher#get_prev_statusline(a:bufnr)
     if ! empty(prev_statusline)
