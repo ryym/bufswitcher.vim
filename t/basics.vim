@@ -96,5 +96,18 @@ describe 'Basic functions:'
       silent execute 'buffer' current_bufnr
       Expect &statusline ==# 'prev-statusline'
     end
+
+    it 'will be called automatically on the specific events'
+      function s:should_be_called_on(event_name)
+        call bufswitcher#show_group()
+        Expect bufswitcher#is_shown() to_be_true
+        silent execute 'doautocmd bufswitcher' a:event_name
+        Expect bufswitcher#is_shown() to_be_false
+      endfunction
+
+      call s:should_be_called_on('CursorMoved')
+      call s:should_be_called_on('InsertEnter')
+      call s:should_be_called_on('CursorHold')
+    end
   end
 end
