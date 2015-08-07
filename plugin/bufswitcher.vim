@@ -22,7 +22,6 @@ endif
 
 let g:bufswitcher_configs = extend({
   \   'current_group' : 'listed',
-  \   'auto_close'    : 1
   \ }, g:bufswitcher_configs)
 
 " }}}
