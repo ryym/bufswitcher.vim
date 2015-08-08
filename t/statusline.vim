@@ -1,4 +1,4 @@
-runtime plugin/bufswitcher.vim
+runtime vspecrc.vim
 
 describe 'Statusline editing'
   before
