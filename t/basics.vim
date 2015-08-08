@@ -42,11 +42,11 @@ describe 'Basic functions:'
 
     it 'shows buffers which belong to the specified group'
       let prev_statusline = 'previous-statusline'
-      let &statusline = prev_statusline
+      let &l:statusline = prev_statusline
       call bufswitcher#show_group('listed')
 
       Expect bufswitcher#is_shown() to_be_true
-      Expect &statusline not ==# prev_statusline
+      Expect &l:statusline not ==# prev_statusline
       Expect g:bufswitcher_configs.current_group ==# 'listed'
     end
 
@@ -64,25 +64,25 @@ describe 'Basic functions:'
 
       let another_bufnr = s:tmp_buffer('b1', '')
       silent execute 'buffer' another_bufnr
-      let &statusline = 'another-buffer-statusline'
+      let &l:statusline = 'another-buffer-statusline'
       call bufswitcher#show_group()
 
-      Expect &statusline ==# 'another-buffer-statusline'
+      Expect &l:statusline ==# 'another-buffer-statusline'
     end
   end
 
   describe '#hide()'
     it 'restores statusline'
-      let &statusline = 'prev-statusline'
+      let &l:statusline = 'prev-statusline'
       call bufswitcher#show_group()
 
       call bufswitcher#hide()
       Expect bufswitcher#is_shown() to_be_false
-      Expect &statusline ==# 'prev-statusline'
+      Expect &l:statusline ==# 'prev-statusline'
     end
 
     it 'restores statusline even if it opened in another buffer'
-      let &statusline   = 'prev-statusline'
+      let &l:statusline   = 'prev-statusline'
       let current_bufnr = bufnr('%')
       call bufswitcher#show_group()
 
@@ -94,7 +94,7 @@ describe 'Basic functions:'
 
       Expect bufswitcher#is_shown() to_be_false
       silent execute 'buffer' current_bufnr
-      Expect &statusline ==# 'prev-statusline'
+      Expect &l:statusline ==# 'prev-statusline'
     end
 
     it 'will be called automatically on the specific events'

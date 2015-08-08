@@ -9,7 +9,7 @@ endfunction
 
 describe 'Statusline editing'
   before
-    let &statusline = 'CURRENT-STATUSLINE'
+    let &l:statusline = 'CURRENT-STATUSLINE'
     unlet! b:bufswitcher_prev_statusline
     let s:tmp_bufnrs = []
   end
@@ -21,29 +21,29 @@ describe 'Statusline editing'
 
   describe '#save_current_statusline'
     it 'saves current statusline to a buffer scope variable'
-      let prev_statusline = &statusline
+      let prev_statusline = &l:statusline
       call bufswitcher#save_current_statusline()
-      let &statusline = 'new-statusline'
+      let &l:statusline = 'new-statusline'
       Expect b:bufswitcher_prev_statusline ==# prev_statusline
     end
   end
 
   describe '#replace_statusline'
     it 'saves previous statusline if necessary'
-      let prev_statusline = &statusline
+      let prev_statusline = &l:statusline
       let new_statusline  = 'new-statusline'
       call bufswitcher#replace_statusline(new_statusline, 1)
 
-      Expect &statusline ==# new_statusline
+      Expect &l:statusline ==# new_statusline
       Expect b:bufswitcher_prev_statusline ==# prev_statusline
     end
 
     it 'does not save previous statusline if unnecessary'
-      let prev_statusline = &statusline
+      let prev_statusline = &l:statusline
       let new_statusline  = 'new-statusline'
       call bufswitcher#replace_statusline(new_statusline, 0)
 
-      Expect &statusline ==# new_statusline
+      Expect &l:statusline ==# new_statusline
       Expect exists('b:bufswitcher_prev_statusline') not to_be_true
     end
 
@@ -55,11 +55,11 @@ describe 'Statusline editing'
 
       silent execute 'buffer' current_bufnr
       call bufswitcher#replace_statusline('new-statusline', 1)
-      Expect &statusline ==# 'new-statusline'
+      Expect &l:statusline ==# 'new-statusline'
 
       for bufnr in bufnrs
         silent execute 'buffer' bufnr
-        Expect &statusline ==# ''
+        Expect &l:statusline ==# ''
       endfor
     end
   end
@@ -67,13 +67,13 @@ describe 'Statusline editing'
   describe '#restore_prev_statusline'
     it 'restores previous statusline'
       let this_bufnr = bufnr('%')
-      let prev_statusline = &statusline
+      let prev_statusline = &l:statusline
       call bufswitcher#save_current_statusline()
 
-      let &statusline = 'new-statsuline'
+      let &l:statusline = 'new-statsuline'
       call bufswitcher#restore_prev_statusline(this_bufnr)
 
-      Expect &statusline ==# prev_statusline
+      Expect &l:statusline ==# prev_statusline
       Expect exists('b:bufswitcher_prev_statusline') not to_be_true
     end
   end
