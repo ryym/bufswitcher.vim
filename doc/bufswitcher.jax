@@ -1,6 +1,6 @@
 *bufswitcher.txt*	Easy buffer switcher using statusline
 
-Version: 0.0.1
+Version: 0.1.0
 Author: ryym <ryym64@gmail.com>
 
 ==============================================================================
@@ -201,6 +201,9 @@ https://github.com/kana/vim-submode
 
 ==============================================================================
 CHAGNELOG						*bufswitcher-changelog*
+
+0.1.0	2015-08-08
+	- バッファリストは常に1つのバッファでのみ開けるようにする。
 
 0.0.1	2015-08-01
 	Initial version.
