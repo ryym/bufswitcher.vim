@@ -1,10 +1,23 @@
 runtime vspecrc.vim
 
+function! s:tmp_buffer(name, another_command)
+  let bufnr = g:Utils.tmp_buffer(a:name, a:another_command)
+  call add(s:tmp_bufnrs, bufnr)
+  return bufnr
+endfunction
+
+
 describe 'Statusline editing'
   before
     let &statusline = 'CURRENT-STATUSLINE'
     unlet! b:bufswitcher_prev_statusline
+    let s:tmp_bufnrs = []
   end
+
+  after
+    call g:Utils.wipeout_all(s:tmp_bufnrs)
+  end
+
 
   describe '#save_current_statusline'
     it 'saves current statusline to a buffer scope variable'
@@ -32,6 +45,22 @@ describe 'Statusline editing'
 
       Expect &statusline ==# new_statusline
       Expect exists('b:bufswitcher_prev_statusline') not to_be_true
+    end
+
+    it 'does not change statuslines of other buffers'
+      let current_bufnr = bufnr('%')
+      let bufnrs = []
+      call add(bufnrs, s:tmp_buffer('b1', ''))
+      call add(bufnrs, s:tmp_buffer('b2', ''))
+
+      silent execute 'buffer' current_bufnr
+      call bufswitcher#replace_statusline('new-statusline', 1)
+      Expect &statusline ==# 'new-statusline'
+
+      for bufnr in bufnrs
+        silent execute 'buffer' bufnr
+        Expect &statusline ==# ''
+      endfor
     end
   end
 
