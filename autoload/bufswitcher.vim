@@ -90,7 +90,8 @@ function! bufswitcher#show(buflister)
   call bufswitcher#replace_statusline(new_statusline, 1)
 
   augroup bufswitcher
-    autocmd CursorMoved,InsertEnter,CursorHold * call s:on_actions_while_opened()
+    autocmd CursorMoved,InsertEnter,CursorHold,WinLeave *
+      \ call s:on_actions_while_opened()
   augroup END
 endfunction
 
@@ -136,12 +137,13 @@ function! bufswitcher#replace_statusline(new_statusline, save_prev_stl)
   if a:save_prev_stl
     call bufswitcher#save_current_statusline()
   endif
-  let &statusline = a:new_statusline
+  let &l:statusline = a:new_statusline
 endfunction
 
 " Save the current statusline in a buffer scope variable.
 function! bufswitcher#save_current_statusline()
-  let b:bufswitcher_prev_statusline = &statusline
+  let current_line = empty(&l:statusline) ? &statusline : &l:statusline
+  let b:bufswitcher_prev_statusline = current_line
 endfunction
 
 " Restore the previous statusline from the buffer scope variable.
@@ -150,7 +152,7 @@ function! bufswitcher#restore_prev_statusline(bufnr)
   let prev_statusline = bufswitcher#get_prev_statusline(a:bufnr)
   if ! empty(prev_statusline)
     silent execute 'buffer' a:bufnr
-    let &statusline = prev_statusline
+    let &l:statusline = prev_statusline
     unlet b:bufswitcher_prev_statusline
   endif
 endfunction

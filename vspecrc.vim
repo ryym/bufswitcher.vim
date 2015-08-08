@@ -6,6 +6,11 @@ runtime plugin/bufswitcher.vim
 
 let g:Utils = {}
 
+" Open a dummy buffer for tests with multiple buffers.
+" This ensures that buffers opened while tests have
+" deferrent bufnr from the first one.
+silent edit ___
+
 " Open a temporary buffer and return its buffer number.
 function! Utils.tmp_buffer(name, ...)
   silent execute 'edit' a:name

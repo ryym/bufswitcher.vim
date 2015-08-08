@@ -16,7 +16,7 @@ describe 'action'
     call add(g:W.bufnrs, g:Utils.tmp_buffer('b5'))
 
     silent execute 'buffer' g:W.bufnrs[0]
-    let &statusline = 'previous-statusline'
+    let &l:statusline = 'previous-statusline'
     let g:W.buflister = bufswitcher#new_buflister('test-buffers', g:W.bufnrs, g:W.bufnrs[0])
     call bufswitcher#show(g:W.buflister)
   end
@@ -50,7 +50,7 @@ describe 'action'
       call s:actions.switch_to(g:W.buflister, g:W.bufnrs[1])
 
       silent execute 'buffer' before_bufnr
-      Expect &statusline ==# 'previous-statusline'
+      Expect &l:statusline ==# 'previous-statusline'
     end
   end
 
