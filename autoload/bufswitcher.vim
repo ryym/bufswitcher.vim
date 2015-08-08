@@ -148,11 +148,11 @@ endfunction
 " This opens the specified buffer to restore.
 function! bufswitcher#restore_prev_statusline(bufnr)
   let prev_statusline = bufswitcher#get_prev_statusline(a:bufnr)
-    if ! empty(prev_statusline)
-      silent execute 'buffer' a:bufnr
-      let &statusline = prev_statusline
-      unlet b:bufswitcher_prev_statusline
-    endif
+  if ! empty(prev_statusline)
+    silent execute 'buffer' a:bufnr
+    let &statusline = prev_statusline
+    unlet b:bufswitcher_prev_statusline
+  endif
 endfunction
 
 " Get saved previous statusline if it exists.
