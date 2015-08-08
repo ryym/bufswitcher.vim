@@ -90,7 +90,8 @@ function! bufswitcher#show(buflister)
   call bufswitcher#replace_statusline(new_statusline, 1)
 
   augroup bufswitcher
-    autocmd CursorMoved,InsertEnter,CursorHold * call s:on_actions_while_opened()
+    autocmd CursorMoved,InsertEnter,CursorHold,WinLeave *
+      \ call s:on_actions_while_opened()
   augroup END
 endfunction
 

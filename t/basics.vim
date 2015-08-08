@@ -108,6 +108,7 @@ describe 'Basic functions:'
       call s:should_be_called_on('CursorMoved')
       call s:should_be_called_on('InsertEnter')
       call s:should_be_called_on('CursorHold')
+      call s:should_be_called_on('WinLeave')
     end
   end
 end
