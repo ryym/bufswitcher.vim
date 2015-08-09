@@ -14,10 +14,40 @@ function! bufswitcher#action#execute(action, ...)
   endif
 
   call bufswitcher#show_group()
-  let buflister = bufswitcher#_states().current_buflister
-  let args      = extend([buflister], a:000)
+  let buflister = deepcopy( bufswitcher#_states().current_buflister )
+  let options   = s:make_exe_options()
+  let args      = extend([buflister, options], a:000)
   let Action    = actions[a:action]
-  call call(Action, args, actions)
+
+  let new_buflister = call(Action, args, actions)
+  if ! empty(new_buflister)
+    call bufswitcher#action#update(new_buflister)
+  endif
+endfunction
+
+" Update statusline by the specified Buflister.
+" If the selected bufnr is changed, switch to the buffer.
+function! bufswitcher#action#update(buflister)
+  let states  = bufswitcher#_states()
+  let current = states.current_buflister
+  if type(a:buflister) != type({}) || current == a:buflister
+    return
+  endif
+
+  call bufswitcher#restore_prev_statusline(current.selected_nr)
+
+  if current.selected_nr != a:buflister.selected_nr
+    silent execute 'buffer' a:buflister.selected_nr
+  endif
+  call states.set_current_buflister(a:buflister)
+
+  let new_stl = bufswitcher#make_statusline(a:buflister)
+  call bufswitcher#replace_statusline(new_stl, 1)
+  call bufswitcher#_states().skip_next_autoclose()
+endfunction
+
+function! s:make_exe_options()
+  return {}
 endfunction
 
 " }}}
@@ -28,46 +58,38 @@ endfunction
 let bufswitcher#action#actions = {}
 let s:actions = bufswitcher#action#actions
 
-" Refresh the current statusline.
-function! s:actions.refresh(buflister, is_new_buffer)
-  let new_statusline = bufswitcher#make_statusline(a:buflister)
-  call bufswitcher#replace_statusline(new_statusline, a:is_new_buffer)
-endfunction
-
 " Open the specified buffer. It continues showing buffer list.
-function! s:actions.switch_to(buflister, bufnr) dict
-  if a:buflister.selected_nr == a:bufnr
-    return
-  endif
-  call bufswitcher#restore_prev_statusline(a:buflister.selected_nr)
+function! s:actions.switch_to(buflister, options, bufnr) dict
   call a:buflister.select(a:bufnr)
-  silent execute 'buffer' a:bufnr
-  call g:bufswitcher#action#actions.refresh(a:buflister, 1)
-  call bufswitcher#_states().skip_next_autoclose()
+  return a:buflister
 endfunction
 
 " Go to previous buffer in buffer list.
-function! s:actions.go_prev(buflister)
+function! s:actions.go_prev(buflister, options)
   let prev_bufnr = a:buflister.get_next_bufnr(-1)
-  call g:bufswitcher#action#actions.switch_to(a:buflister, prev_bufnr)
+  call a:buflister.select(prev_bufnr)
+  return a:buflister
 endfunction
 
 " Go to previous buffer in buffer list.
-function! s:actions.go_next(buflister)
+function! s:actions.go_next(buflister, options)
   let next_bufnr = a:buflister.get_next_bufnr(1)
-  call g:bufswitcher#action#actions.switch_to(a:buflister, next_bufnr)
+  call a:buflister.select(next_bufnr)
+  return a:buflister
 endfunction
 
 " Go to first buffer in buffer list.
-function! s:actions.go_first(buflister)
+function! s:actions.go_first(buflister, options)
   let first_bufnr = a:buflister.bufnrs[0]
-  call g:bufswitcher#action#actions.switch_to(a:buflister, first_bufnr)
+  call a:buflister.select(first_bufnr)
+  return a:buflister
 endfunction
 
 " Go to last buffer in buffer list.
-function! s:actions.go_last(buflister)
+function! s:actions.go_last(buflister, options)
   let last_bufnr = a:buflister.bufnrs[-1]
-  call g:bufswitcher#action#actions.switch_to(a:buflister, last_bufnr)
+  call a:buflister.select(last_bufnr)
+  return a:buflister
 endfunction
 
 unlet s:actions
