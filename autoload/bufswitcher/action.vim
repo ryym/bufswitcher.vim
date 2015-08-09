@@ -58,46 +58,38 @@ endfunction
 let bufswitcher#action#actions = {}
 let s:actions = bufswitcher#action#actions
 
-" Refresh the current statusline.
-function! s:actions.refresh(buflister, is_new_buffer)
-  let new_statusline = bufswitcher#make_statusline(a:buflister)
-  call bufswitcher#replace_statusline(new_statusline, a:is_new_buffer)
-endfunction
-
 " Open the specified buffer. It continues showing buffer list.
-function! s:actions.switch_to(buflister, bufnr) dict
-  if a:buflister.selected_nr == a:bufnr
-    return
-  endif
-  call bufswitcher#restore_prev_statusline(a:buflister.selected_nr)
+function! s:actions.switch_to(buflister, options, bufnr) dict
   call a:buflister.select(a:bufnr)
-  silent execute 'buffer' a:bufnr
-  call g:bufswitcher#action#actions.refresh(a:buflister, 1)
-  call bufswitcher#_states().skip_next_autoclose()
+  return a:buflister
 endfunction
 
 " Go to previous buffer in buffer list.
-function! s:actions.go_prev(buflister)
+function! s:actions.go_prev(buflister, options)
   let prev_bufnr = a:buflister.get_next_bufnr(-1)
-  call g:bufswitcher#action#actions.switch_to(a:buflister, prev_bufnr)
+  call a:buflister.select(prev_bufnr)
+  return a:buflister
 endfunction
 
 " Go to previous buffer in buffer list.
-function! s:actions.go_next(buflister)
+function! s:actions.go_next(buflister, options)
   let next_bufnr = a:buflister.get_next_bufnr(1)
-  call g:bufswitcher#action#actions.switch_to(a:buflister, next_bufnr)
+  call a:buflister.select(next_bufnr)
+  return a:buflister
 endfunction
 
 " Go to first buffer in buffer list.
-function! s:actions.go_first(buflister)
+function! s:actions.go_first(buflister, options)
   let first_bufnr = a:buflister.bufnrs[0]
-  call g:bufswitcher#action#actions.switch_to(a:buflister, first_bufnr)
+  call a:buflister.select(first_bufnr)
+  return a:buflister
 endfunction
 
 " Go to last buffer in buffer list.
-function! s:actions.go_last(buflister)
+function! s:actions.go_last(buflister, options)
   let last_bufnr = a:buflister.bufnrs[-1]
-  call g:bufswitcher#action#actions.switch_to(a:buflister, last_bufnr)
+  call a:buflister.select(last_bufnr)
+  return a:buflister
 endfunction
 
 unlet s:actions
