@@ -58,12 +58,6 @@ endfunction
 let bufswitcher#action#actions = {}
 let s:actions = bufswitcher#action#actions
 
-" Refresh the current statusline.
-function! s:actions.refresh(buflister, is_new_buffer)
-  let new_statusline = bufswitcher#make_statusline(a:buflister)
-  call bufswitcher#replace_statusline(new_statusline, a:is_new_buffer)
-endfunction
-
 " Open the specified buffer. It continues showing buffer list.
 function! s:actions.switch_to(buflister, bufnr) dict
   if a:buflister.selected_nr == a:bufnr
