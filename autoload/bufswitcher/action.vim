@@ -14,10 +14,15 @@ function! bufswitcher#action#execute(action, ...)
   endif
 
   call bufswitcher#show_group()
-  let buflister = bufswitcher#_states().current_buflister
-  let args      = extend([buflister], a:000)
+  let buflister = deepcopy( bufswitcher#_states().current_buflister )
+  let options   = s:make_exe_options()
+  let args      = extend([buflister, options], a:000)
   let Action    = actions[a:action]
-  call call(Action, args, actions)
+
+  let new_buflister = call(Action, args, actions)
+  if ! empty(new_buflister)
+    call bufswitcher#action#update(new_buflister)
+  endif
 endfunction
 
 " Update statusline by the specified Buflister.
@@ -39,6 +44,10 @@ function! bufswitcher#action#update(buflister)
   let new_stl = bufswitcher#make_statusline(a:buflister)
   call bufswitcher#replace_statusline(new_stl, 1)
   call bufswitcher#_states().skip_next_autoclose()
+endfunction
+
+function! s:make_exe_options()
+  return {}
 endfunction
 
 " }}}

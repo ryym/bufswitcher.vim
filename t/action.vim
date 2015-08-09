@@ -11,8 +11,35 @@ let s:this_bufnr = bufnr('%')
 
 describe 'action executor'
   describe '#action#execute()'
-    it 'executes the specified action and updates statusline'
-      TODO
+    before
+      function! g:bufswitcher#action#actions.test(buflister, options, ...)
+        let g:W.test_called = 1
+        let g:W.test_args = a:000
+        let a:buflister.is_updated = 1
+        return a:buflister
+      endfunction
+    end
+
+    after
+      delfunction g:bufswitcher#action#actions.test
+      unlet! g:W.test_called g:W.test_args
+    end
+
+
+    it 'executes the specified action with arbitrary arguments'
+      call bufswitcher#action#execute('test', 1, 2, 3)
+      Expect g:W.test_called to_be_true
+      Expect g:W.test_args == [1, 2, 3]
+    end
+
+    it 'opens buffer list'
+      call bufswitcher#action#execute('test')
+      Expect bufswitcher#is_shown() to_be_true
+    end
+
+    it 'updates buffer list by Buflister the action returns'
+      call bufswitcher#action#execute('test')
+      Expect bufswitcher#_states().current_buflister.is_updated to_be_true
     end
   end
   
