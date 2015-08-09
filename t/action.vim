@@ -63,6 +63,7 @@ describe 'action executor'
 
         Expect bufnr('%') == new_buflister.selected_nr
         Expect &l:statusline ==# bufswitcher#make_statusline(new_buflister)
+        Expect bufswitcher#_states().will_skip_next_autoclose to_be_true
       end
 
       it 'restores statusline of the previous buffer'

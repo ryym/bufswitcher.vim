@@ -20,6 +20,27 @@ function! bufswitcher#action#execute(action, ...)
   call call(Action, args, actions)
 endfunction
 
+" Update statusline by the specified Buflister.
+" If the selected bufnr is changed, switch to the buffer.
+function! bufswitcher#action#update(buflister)
+  let states  = bufswitcher#_states()
+  let current = states.current_buflister
+  if type(a:buflister) != type({}) || current == a:buflister
+    return
+  endif
+
+  call bufswitcher#restore_prev_statusline(current.selected_nr)
+
+  if current.selected_nr != a:buflister.selected_nr
+    silent execute 'buffer' a:buflister.selected_nr
+  endif
+  call states.set_current_buflister(a:buflister)
+
+  let new_stl = bufswitcher#make_statusline(a:buflister)
+  call bufswitcher#replace_statusline(new_stl, 1)
+  call bufswitcher#_states().skip_next_autoclose()
+endfunction
+
 " }}}
 
 " Default actions {{{
