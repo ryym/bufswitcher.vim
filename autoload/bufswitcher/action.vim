@@ -42,7 +42,7 @@ function! bufswitcher#action#update(buflister)
   call states.set_current_buflister(a:buflister)
 
   let new_stl = bufswitcher#make_statusline(a:buflister)
-  call bufswitcher#replace_statusline(new_stl, 1)
+  call bufswitcher#replace_statusline(new_stl)
   call bufswitcher#_states().skip_next_autoclose()
 endfunction
 

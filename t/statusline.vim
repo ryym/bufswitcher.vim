@@ -29,22 +29,23 @@ describe 'Statusline editing'
   end
 
   describe '#replace_statusline'
-    it 'saves previous statusline if necessary'
+    it 'replaces statusline and saves the previous one'
       let prev_statusline = &l:statusline
       let new_statusline  = 'new-statusline'
-      call bufswitcher#replace_statusline(new_statusline, 1)
+      call bufswitcher#replace_statusline(new_statusline)
 
       Expect &l:statusline ==# new_statusline
       Expect b:bufswitcher_prev_statusline ==# prev_statusline
     end
 
-    it 'does not save previous statusline if unnecessary'
+    it 'remembers the first statusline after multiple replacing'
       let prev_statusline = &l:statusline
-      let new_statusline  = 'new-statusline'
-      call bufswitcher#replace_statusline(new_statusline, 0)
+      call bufswitcher#replace_statusline('new-stl1')
+      call bufswitcher#replace_statusline('new-stl2')
+      call bufswitcher#replace_statusline('new-stl3')
 
-      Expect &l:statusline ==# new_statusline
-      Expect exists('b:bufswitcher_prev_statusline') not to_be_true
+      Expect &l:statusline ==# 'new-stl3'
+      Expect bufswitcher#get_prev_statusline(bufnr('%')) ==# prev_statusline
     end
 
     it 'does not change statuslines of other buffers'
@@ -54,7 +55,7 @@ describe 'Statusline editing'
       call add(bufnrs, s:tmp_buffer('b2', ''))
 
       silent execute 'buffer' current_bufnr
-      call bufswitcher#replace_statusline('new-statusline', 1)
+      call bufswitcher#replace_statusline('new-statusline')
       Expect &l:statusline ==# 'new-statusline'
 
       for bufnr in bufnrs

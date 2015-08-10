@@ -87,7 +87,7 @@ endfunction
 function! bufswitcher#show(buflister)
   call bufswitcher#_states().set_current_buflister(a:buflister)
   let new_statusline = bufswitcher#make_statusline(a:buflister)
-  call bufswitcher#replace_statusline(new_statusline, 1)
+  call bufswitcher#replace_statusline(new_statusline)
 
   augroup bufswitcher
     autocmd CursorMoved,InsertEnter,CursorHold,WinLeave *
@@ -132,9 +132,10 @@ endfunction
 
 " Edit statusline {{{
 
-" Set the specified string to statusline and save previous one if necessary.
-function! bufswitcher#replace_statusline(new_statusline, save_prev_stl)
-  if a:save_prev_stl
+" Set the specified string to statusline and save previous one
+" if it doesn't have saved one yet.
+function! bufswitcher#replace_statusline(new_statusline)
+  if empty( bufswitcher#get_prev_statusline(bufnr('%')) )
     call bufswitcher#save_current_statusline()
   endif
   let &l:statusline = a:new_statusline
