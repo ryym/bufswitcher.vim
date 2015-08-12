@@ -22,6 +22,7 @@ describe 'Buflister'
     call g:Utils.wipeout_all(s:bufnrs)
   end
 
+
   describe '.new()'
     it 'has fields used to write statusline'
       let this_bufnr   = bufnr('%')

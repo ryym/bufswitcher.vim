@@ -19,7 +19,7 @@ describe 'Statusline editing'
   end
 
 
-  describe '#save_current_statusline'
+  describe '#save_current_statusline()'
     it 'saves current statusline to a buffer scope variable'
       let prev_statusline = &l:statusline
       call bufswitcher#save_current_statusline()
@@ -28,7 +28,7 @@ describe 'Statusline editing'
     end
   end
 
-  describe '#replace_statusline'
+  describe '#replace_statusline()'
     it 'replaces statusline and saves the previous one'
       let prev_statusline = &l:statusline
       let new_statusline  = 'new-statusline'
@@ -65,7 +65,7 @@ describe 'Statusline editing'
     end
   end
 
-  describe '#restore_prev_statusline'
+  describe '#restore_prev_statusline()'
     it 'restores previous statusline'
       let this_bufnr = bufnr('%')
       let prev_statusline = &l:statusline

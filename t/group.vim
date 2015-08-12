@@ -24,7 +24,7 @@ describe 'Group'
     end
   end
 
-  describe 'listed()'
+  describe '.listed()'
     it 'lists buffers which are listed in the buffer list'
       let bufnrs = []
       let unlisted_bufnrs = []
