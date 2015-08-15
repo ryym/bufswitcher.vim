@@ -34,7 +34,7 @@ describe 'action executor'
 
     it 'updates buffer list by Buflister the action returns'
       call bufswitcher#action#execute('test')
-      Expect bufswitcher#_states().current_buflister.is_updated to_be_true
+      Expect bufswitcher#_get_states().buflister.is_updated to_be_true
     end
   end
   
@@ -85,7 +85,7 @@ describe 'action executor'
 
         Expect bufnr('%') == new_buflister.selected_nr
         Expect &l:statusline ==# bufswitcher#make_statusline(new_buflister)
-        Expect bufswitcher#_states().will_skip_next_autoclose to_be_true
+        Expect bufswitcher#_get_states().will_skip_next_autoclose to_be_true
       end
 
       it 'restores statusline of the previous buffer'

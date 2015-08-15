@@ -14,7 +14,7 @@ function! bufswitcher#action#execute(action, ...)
   endif
 
   call bufswitcher#show_group()
-  let buflister = deepcopy( bufswitcher#_states().current_buflister )
+  let buflister = deepcopy( bufswitcher#_get_states().buflister )
   let options   = s:make_exe_options()
   let args      = extend([buflister, options], a:000)
   let Action    = actions[a:action]
@@ -28,8 +28,8 @@ endfunction
 " Update statusline by the specified Buflister.
 " If the selected bufnr is changed, switch to the buffer.
 function! bufswitcher#action#update(buflister)
-  let states  = bufswitcher#_states()
-  let current = states.current_buflister
+  let states  = bufswitcher#_get_states()
+  let current = states.buflister
   if type(a:buflister) != type({}) || current == a:buflister
     return
   endif
@@ -39,11 +39,11 @@ function! bufswitcher#action#update(buflister)
   if current.selected_nr != a:buflister.selected_nr
     silent execute 'buffer' a:buflister.selected_nr
   endif
-  call states.set_current_buflister(a:buflister)
+  call states.set_buflister(a:buflister)
 
   let new_stl = bufswitcher#make_statusline(a:buflister)
   call bufswitcher#replace_statusline(new_stl)
-  call bufswitcher#_states().skip_next_autoclose()
+  call states.skip_next_autoclose()
 endfunction
 
 function! s:make_exe_options()
