@@ -37,7 +37,7 @@ describe 'action executor'
       Expect bufswitcher#_get_states().buflister.is_updated to_be_true
     end
   end
-  
+
   describe '#action#update()'
     before
       let bufnrs = [s:this_bufnr, g:Utils.tmp_buffer('b2')]
