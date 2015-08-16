@@ -1,7 +1,7 @@
 runtime vspecrc.vim
 
-function! s:tmp_buffer(name, another_command)
-  let bufnr = g:Utils.tmp_buffer(a:name, a:another_command)
+function! s:open_new_buffer(name, another_command)
+  let bufnr = g:Utils.open_new_buffer(a:name, a:another_command)
   call add(s:tmp_bufnrs, bufnr)
   return bufnr
 endfunction
@@ -51,8 +51,8 @@ describe 'Statusline editing'
     it 'does not change statuslines of other buffers'
       let current_bufnr = bufnr('%')
       let bufnrs = []
-      call add(bufnrs, s:tmp_buffer('b1', ''))
-      call add(bufnrs, s:tmp_buffer('b2', ''))
+      call add(bufnrs, s:open_new_buffer('b1', ''))
+      call add(bufnrs, s:open_new_buffer('b2', ''))
 
       silent execute 'buffer' current_bufnr
       call bufswitcher#replace_statusline('new-statusline')

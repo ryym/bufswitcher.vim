@@ -5,17 +5,17 @@ describe 'Group'
     it 'lists all buffers including unlisted buffers'
       let bufnrs = []
 
-      call add(bufnrs, g:Utils.tmp_buffer('b1'))
-      call add(bufnrs, g:Utils.tmp_buffer('b2'))
-      call add(bufnrs, g:Utils.tmp_buffer('b_unlisted1', 'setl nobuflisted'))
+      call add(bufnrs, g:Utils.open_new_buffer('b1'))
+      call add(bufnrs, g:Utils.open_new_buffer('b2'))
+      call add(bufnrs, g:Utils.open_new_buffer('b_unlisted1', 'setl nobuflisted'))
 
       tabnew
-      call add(bufnrs, g:Utils.tmp_buffer('b4'))
-      call add(bufnrs, g:Utils.tmp_buffer('b_unlisted2', 'setl nobuflisted'))
+      call add(bufnrs, g:Utils.open_new_buffer('b4'))
+      call add(bufnrs, g:Utils.open_new_buffer('b_unlisted2', 'setl nobuflisted'))
 
       wincmd s
-      call add(bufnrs, g:Utils.tmp_buffer('b5'))
-      call add(bufnrs, g:Utils.tmp_buffer('b_unlisted3', 'setl nobuflisted'))
+      call add(bufnrs, g:Utils.open_new_buffer('b5'))
+      call add(bufnrs, g:Utils.open_new_buffer('b_unlisted3', 'setl nobuflisted'))
 
       let buflister = g:bufswitcher#group#groups.all()
       for bufnr in bufnrs
@@ -29,20 +29,20 @@ describe 'Group'
       let bufnrs = []
       let unlisted_bufnrs = []
 
-      call add(bufnrs, g:Utils.tmp_buffer('b1'))
-      call add(bufnrs, g:Utils.tmp_buffer('b2'))
+      call add(bufnrs, g:Utils.open_new_buffer('b1'))
+      call add(bufnrs, g:Utils.open_new_buffer('b2'))
       call add(unlisted_bufnrs,
-        \ g:Utils.tmp_buffer('b_unlisted1', 'setl nobuflisted'))
+        \ g:Utils.open_new_buffer('b_unlisted1', 'setl nobuflisted'))
 
       tabnew
-      call add(bufnrs, g:Utils.tmp_buffer('b4'))
+      call add(bufnrs, g:Utils.open_new_buffer('b4'))
       call add(unlisted_bufnrs,
-        \ g:Utils.tmp_buffer('b_unlisted2', 'setl nobuflisted'))
+        \ g:Utils.open_new_buffer('b_unlisted2', 'setl nobuflisted'))
 
       wincmd s
-      call add(bufnrs, g:Utils.tmp_buffer('b5'))
+      call add(bufnrs, g:Utils.open_new_buffer('b5'))
       call add(unlisted_bufnrs,
-        \ g:Utils.tmp_buffer('b_unlisted3', 'setl nobuflisted'))
+        \ g:Utils.open_new_buffer('b_unlisted3', 'setl nobuflisted'))
 
       let buflister = g:bufswitcher#group#groups.listed()
       for bufnr in bufnrs

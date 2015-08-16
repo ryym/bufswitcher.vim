@@ -40,7 +40,7 @@ describe 'action executor'
 
   describe '#action#update()'
     before
-      let bufnrs = [s:this_bufnr, g:Utils.tmp_buffer('b2')]
+      let bufnrs = [s:this_bufnr, g:Utils.open_new_buffer('b2')]
       silent execute 'buffer' s:this_bufnr
 
       let s:current_buflister = bufswitcher#new_buflister('test', bufnrs, bufnrs[0])
