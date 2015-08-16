@@ -2,8 +2,8 @@ runtime vspecrc.vim
 
 let s:default_configs = copy(g:bufswitcher_configs)
 
-function! s:tmp_buffer(name, another_command)
-  let bufnr = g:Utils.tmp_buffer(a:name, a:another_command)
+function! s:open_new_buffer(name, another_command)
+  let bufnr = g:Utils.open_new_buffer(a:name, a:another_command)
   call add(s:tmp_bufnrs, bufnr)
   return bufnr
 endfunction
@@ -62,7 +62,7 @@ describe 'Basic functions:'
       call bufswitcher#show_group()
       Expect bufswitcher#is_shown() to_be_true
 
-      let another_bufnr = s:tmp_buffer('b1', '')
+      let another_bufnr = s:open_new_buffer('b1', '')
       silent execute 'buffer' another_bufnr
       let &l:statusline = 'another-buffer-statusline'
       call bufswitcher#show_group()
@@ -86,7 +86,7 @@ describe 'Basic functions:'
       let current_bufnr = bufnr('%')
       call bufswitcher#show_group()
 
-      let bufnr = s:tmp_buffer('b', '')
+      let bufnr = s:open_new_buffer('b', '')
       silent execute 'buffer' bufnr
       Expect bufswitcher#is_shown() to_be_true
 

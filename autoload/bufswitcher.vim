@@ -85,9 +85,9 @@ endfunction
 
 " Show buffer list.
 function! bufswitcher#show(buflister)
-  call bufswitcher#_states().set_current_buflister(a:buflister)
+  call bufswitcher#_put_new_states(a:buflister)
   let new_statusline = bufswitcher#make_statusline(a:buflister)
-  call bufswitcher#replace_statusline(new_statusline, 1)
+  call bufswitcher#replace_statusline(new_statusline)
 
   augroup bufswitcher
     autocmd CursorMoved,InsertEnter,CursorHold,WinLeave *
@@ -102,7 +102,7 @@ function! bufswitcher#hide()
   endif
 
   let current_bufnr = bufnr('%')
-  let opener_bufnr  = bufswitcher#_states().current_buflister.selected_nr
+  let opener_bufnr  = bufswitcher#_get_states().buflister.selected_nr
 
   call bufswitcher#restore_prev_statusline(opener_bufnr)
   silent execute 'buffer' current_bufnr
@@ -110,17 +110,17 @@ function! bufswitcher#hide()
   augroup bufswitcher
     autocmd!
   augroup END
-  call bufswitcher#_states().clear_current_buflister()
+  call bufswitcher#_destroy_states()
 endfunction
 
 " Return non-zero if buffer list is shown in statusline.
 function! bufswitcher#is_shown()
-  return bufswitcher#_states().is_shown()
+  return ! empty(bufswitcher#_get_states())
 endfunction
 
 " An event to hide buffer list automatically.
 function! s:on_actions_while_opened()
-  let states = bufswitcher#_states()
+  let states = bufswitcher#_get_states()
   if states.will_skip_next_autoclose
     let states.will_skip_next_autoclose = 0
     return
@@ -132,9 +132,10 @@ endfunction
 
 " Edit statusline {{{
 
-" Set the specified string to statusline and save previous one if necessary.
-function! bufswitcher#replace_statusline(new_statusline, save_prev_stl)
-  if a:save_prev_stl
+" Set the specified string to statusline and save previous one
+" if it doesn't have saved one yet.
+function! bufswitcher#replace_statusline(new_statusline)
+  if empty( bufswitcher#get_prev_statusline(bufnr('%')) )
     call bufswitcher#save_current_statusline()
   endif
   let &l:statusline = a:new_statusline
@@ -187,32 +188,42 @@ endfunction
 
 " State object {{{
 
-" Get a state object.
-function! bufswitcher#_states()
-  return s:_states
+" Put a new state object.
+function! bufswitcher#_put_new_states(buflister)
+  let s:_states = s:States.new(a:buflister)
 endfunction
 
-let s:_states = {}
+" Get the current states.
+function! bufswitcher#_get_states()
+  return get(s:, '_states', 0)
+endfunction
 
-" If this flag is on, next autoclose event will be skipped.
-" So statusline continues showing buffer list.
-let s:_states.will_skip_next_autoclose = 0
+" Remove the current state object.
+function! bufswitcher#_destroy_states()
+  unlet! s:_states
+endfunction
 
-function! s:_states.skip_next_autoclose() dict
+" An object which exists only while the buffer list is shown.
+let s:States = {}
+
+function! s:States.new(buflister)
+  let inst = extend({}, s:States)
+
+  " If this flag is on, next autoclose event will be skipped.
+  " So the statusline continues showing buffer list.
+  let inst.will_skip_next_autoclose = 0
+
+  call inst.set_buflister(a:buflister)
+
+  return inst
+endfunction
+
+function! s:States.skip_next_autoclose() dict
   let self.will_skip_next_autoclose = 1
 endfunction
 
-function! s:_states.set_current_buflister(buflister) dict
-  let self.current_buflister = a:buflister
-endfunction
-
-function! s:_states.clear_current_buflister() dict
-  let self.will_skip_next_autoclose = 0
-  unlet! self.current_buflister
-endfunction
-
-function! s:_states.is_shown() dict
-  return has_key(self, 'current_buflister')
+function! s:States.set_buflister(buflister) dict
+  let self.buflister = deepcopy(a:buflister)
 endfunction
 
 " }}}

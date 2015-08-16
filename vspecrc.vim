@@ -11,8 +11,8 @@ let g:Utils = {}
 " deferrent bufnr from the first one.
 silent edit ___
 
-" Open a temporary buffer and return its buffer number.
-function! Utils.tmp_buffer(name, ...)
+" Open a new buffer and return its buffer number.
+function! Utils.open_new_buffer(name, ...)
   silent execute 'edit' a:name
   let another_command = get(a:, '1', '')
   if ! empty(another_command)

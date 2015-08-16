@@ -1,10 +1,10 @@
 runtime vspecrc.vim
 
 
-function s:open_tmp_buffers(n_buffers)
+function s:open_open_new_buffers(n_buffers)
   let bufnrs = []
   for i in range(1, a:n_buffers)
-    let bufnr = g:Utils.tmp_buffer('b' . (i+1))
+    let bufnr = g:Utils.open_new_buffer('b' . (i+1))
     call add(bufnrs, bufnr)
   endfor
 
@@ -21,6 +21,7 @@ describe 'Buflister'
   after
     call g:Utils.wipeout_all(s:bufnrs)
   end
+
 
   describe '.new()'
     it 'has fields used to write statusline'
@@ -47,7 +48,7 @@ describe 'Buflister'
 
   describe '.get_next_bufnr()'
     it 'returns a bufnr which is ahead of the current one'
-      let bufnrs    = s:open_tmp_buffers(3)
+      let bufnrs    = s:open_open_new_buffers(3)
       let buflister = bufswitcher#new_buflister('bufnrs', bufnrs, bufnrs[0])
       Expect buflister.bufnrs == bufnrs
       Expect buflister.get_next_bufnr(1) == bufnrs[1]
@@ -57,7 +58,7 @@ describe 'Buflister'
     end
 
     it 'returns a bufnr which is behind the current one'
-      let bufnrs    = s:open_tmp_buffers(3)
+      let bufnrs    = s:open_open_new_buffers(3)
       let buflister = bufswitcher#new_buflister('bufnrs', bufnrs, bufnrs[2])
       Expect buflister.bufnrs == bufnrs
       Expect buflister.get_next_bufnr(-1) == bufnrs[1]
