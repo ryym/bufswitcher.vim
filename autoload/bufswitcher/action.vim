@@ -37,7 +37,8 @@ function! bufswitcher#action#update(buflister)
   call bufswitcher#restore_prev_statusline(current.selected_nr)
 
   if current.selected_nr != a:buflister.selected_nr
-    silent execute 'buffer' a:buflister.selected_nr
+    let keepalt = (current.selected_nr == states.start_nr) ? '' : 'keepalt'
+    silent execute keepalt 'buffer' a:buflister.selected_nr
   endif
   call states.set_buflister(a:buflister)
 

@@ -208,12 +208,14 @@ let s:States = {}
 
 function! s:States.new(buflister)
   let inst = extend({}, s:States)
+  call inst.set_buflister(a:buflister)
 
   " If this flag is on, next autoclose event will be skipped.
   " So the statusline continues showing buffer list.
   let inst.will_skip_next_autoclose = 0
 
-  call inst.set_buflister(a:buflister)
+  " The buffer number in which the buffer list was opened.
+  let inst.start_nr = bufnr('%')
 
   return inst
 endfunction

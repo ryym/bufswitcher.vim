@@ -40,7 +40,11 @@ describe 'action executor'
 
   describe '#action#update()'
     before
-      let bufnrs = [s:this_bufnr, g:Utils.open_new_buffer('b2')]
+      let bufnrs = [
+        \ s:this_bufnr,
+        \ g:Utils.open_new_buffer('b2'),
+        \ g:Utils.open_new_buffer('b3'),
+        \ ]
       silent execute 'buffer' s:this_bufnr
 
       let s:current_buflister = bufswitcher#new_buflister('test', bufnrs, bufnrs[0])
@@ -99,6 +103,29 @@ describe 'action executor'
         Expect bufnr('%') != prev_bufnr
         silent execute 'buffer' prev_bufnr
         Expect &l:statusline ==# 'prev-statusline'
+      end
+
+      it 'keeps alternate buffer as the buffer in which the buffer list was opened'
+        function s:change_buffer(new_buflister, bufnr)
+          let a:new_buflister.selected_nr = a:bufnr
+          call bufswitcher#action#update(a:new_buflister)
+        endfunction
+
+        let new_buflister = deepcopy(s:current_buflister)
+        let start_bufnr   = new_buflister.bufnrs[0]
+        Expect bufnr('%') == start_bufnr
+
+        call s:change_buffer(new_buflister, new_buflister.bufnrs[1])
+        call s:change_buffer(new_buflister, new_buflister.bufnrs[2])
+        Expect bufnr('%') == new_buflister.bufnrs[2]
+        Expect bufnr('#') == start_bufnr
+
+        call s:change_buffer(new_buflister, new_buflister.bufnrs[0])
+        call s:change_buffer(new_buflister, new_buflister.bufnrs[1])
+        Expect bufnr('%') == new_buflister.bufnrs[1]
+        Expect bufnr('#') == start_bufnr
+
+        delfunction s:change_buffer
       end
     end
   end
