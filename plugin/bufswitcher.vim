@@ -21,11 +21,10 @@ if ! exists('g:bufswitcher_configs') || type(g:bufswitcher_configs) != type({})
 endif
 
 let g:bufswitcher_configs = extend({
-  \   'current_group' : 'listed',
   \   'listed': 1,
-  \   'per_tab': 1,
-  \   'order': 'bufnr',
-  \   'show_index': 0,
+  \   'per_tab': 0,
+  \   'order': 'recent',
+  \   'show_index': 1,
   \ }, g:bufswitcher_configs)
 
 " }}}
