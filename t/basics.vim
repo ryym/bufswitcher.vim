@@ -12,10 +12,6 @@ endfunction
 describe 'Default settings'
   it 'provides configuration dictionary with default values'
     Expect exists('g:bufswitcher_configs') to_be_true
-
-    let configs = g:bufswitcher_configs
-    Expect len(configs) == 1
-    Expect configs.current_group ==# 'listed'
   end
 end
 
