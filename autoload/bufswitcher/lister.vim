@@ -36,16 +36,24 @@ endfunction
 
 function! s:compare_bufs(order, a, b)
   if a:order == 'recent'
-    " TODO: implement
+    let times = g:bufswitcher_buf_enter_times
+    let at = has_key(times, a:a) ? times[a:a] : 0
+    let bt = has_key(times, a:b) ? times[a:b] : 0
+    return bt - at
   endif
   return a:a - a:b
 endfunction
 
 function! bufswitcher#lister#setup()
+  let g:bufswitcher_buf_enter_times = {}
+
   augroup bufswitcher_lister
     autocmd!
     autocmd BufEnter,BufWinEnter,BufFilePost * call <SID>add_tabbuf()
+    autocmd BufWinEnter * call <SID>touch_buf()
   augroup END
+
+  call bufswitcher#on_hide(funcref('s:touch_buf'))
 endfunction
 
 function! s:add_tabbuf()
@@ -57,4 +65,19 @@ function! s:add_tabbuf()
   if bufnr == expand('<abuf>')
     let t:bfs_tabbufs[bufnr] = 1
   endif
+endfunction
+
+let s:last_entered = 0
+
+" Touch opened buffer for 'recent' buffer list order.
+" It skips touching while switching.
+function! s:touch_buf(...)
+  if bufswitcher#is_shown()
+    return
+  endif
+
+  let bufnr = get(a:, '1', bufnr('%'))
+  let entered = s:last_entered + 1
+  let g:bufswitcher_buf_enter_times[bufnr] = entered
+  let s:last_entered = entered
 endfunction

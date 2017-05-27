@@ -47,6 +47,19 @@ describe 'Lister'
       let bufnrs = s:run_list({ 'per_tab': 1 })
       Expect bufnrs == [bufs[2].bufnr, bufs[3].bufnr]
     end
+
+    it 'can list buffers order by last entered time'
+      let bufs = s:prepare_buffers([
+        \ { 'listed': 0 },
+        \ { 'listed': 1 },
+        \ { 'run': 'tabnew' },
+        \ { 'listed': 1 },
+        \ { 'listed': 0 },
+        \ ])
+
+      let bufnrs = s:run_list({ 'order': 'recent' })
+      Expect bufnrs == reverse(map(bufs, 'v:val.bufnr'))
+    end
   end
 end
 
