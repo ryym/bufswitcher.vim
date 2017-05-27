@@ -185,14 +185,17 @@ function! bufswitcher#make_statusline(buflister)
   let selected_nr = a:buflister.selected_nr
   let line = '%#BufswitcherTitle#' . a:buflister.title . ' :%#BufswitcherBackGround#'
 
+  let idx = 0
   for bufnr in a:buflister.bufnrs
+    let idx += 1
     let buffer_name = a:buflister.bufnames[bufnr]
     if buffer_name == ''
       let buffer_name = '[No name]'
     endif
     let is_selected_nr = (selected_nr == bufnr)
 
-    let line .= '%#BufswitcherBufNumber# ' . bufnr . ' %#BufswitcherBackGround#'
+    let key = g:bufswitcher_configs.show_index ? idx : bufnr
+    let line .= '%#BufswitcherBufNumber# ' . key . ' %#BufswitcherBackGround#'
     let line .= (is_selected_nr ? '%#BufswitcherSelected#' : '%#BufswitcherBufName#')
     let line .= ' ' . buffer_name . (getbufvar(bufnr, '&modified') ? '[+]' : '') . ' '
     let line .= '%#BufswitcherBackGround#  '

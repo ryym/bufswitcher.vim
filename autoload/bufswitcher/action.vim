@@ -67,8 +67,11 @@ let bufswitcher#action#actions = {}
 let s:actions = bufswitcher#action#actions
 
 " Open the specified buffer. It continues showing buffer list.
-function! s:actions.switch_to(buflister, options, bufnr) dict
-  call a:buflister.select(a:bufnr)
+function! s:actions.switch_to(buflister, options, idx_or_bufnr) dict
+  let bufnr = g:bufswitcher_configs.show_index
+    \ ? a:buflister.bufnrs[a:idx_or_bufnr - 1]
+    \ : a:idx_or_bufnr
+  call a:buflister.select(bufnr)
   return a:buflister
 endfunction
 

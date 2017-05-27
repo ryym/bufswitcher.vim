@@ -25,6 +25,7 @@ let g:bufswitcher_configs = extend({
   \   'listed': 1,
   \   'per_tab': 1,
   \   'order': 'bufnr',
+  \   'show_index': 0,
   \ }, g:bufswitcher_configs)
 
 " }}}
