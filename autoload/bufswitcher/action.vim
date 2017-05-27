@@ -37,7 +37,14 @@ function! bufswitcher#action#update(buflister)
   call bufswitcher#restore_prev_statusline(current.selected_nr)
 
   if current.selected_nr != a:buflister.selected_nr
-    let keepalt = (current.selected_nr == states.start_nr) ? '' : 'keepalt'
+    " Update alternate buffer properly:
+    " If you move like `a -> b -> c`, `c` is the alt.
+    " If you move like `a -> b -> a`, do not change the alt.
+    let keepalt = 'keepalt'
+    if current.selected_nr == states.start_nr || a:buflister.selected_nr == states.start_nr
+      let keepalt = ''
+    end
+
     silent execute keepalt 'buffer' a:buflister.selected_nr
   endif
   call states.set_buflister(a:buflister)
