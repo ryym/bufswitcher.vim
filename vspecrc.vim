@@ -28,6 +28,18 @@ function! Utils.wipeout_all(bufnrs)
   endfor
 endfunction
 
+" Remove buffer numbers which is not created in the tests.
+function! Utils.remove_test_buffers(bufnrs)
+  let results = []
+  for n in a:bufnrs
+    let name = bufname(n)
+    if !empty(name) && !isdirectory(name) && name !~ 't/.\+\.vim' && name !~ '___'
+      call add(results, n)
+    end
+  endfor
+  return results
+endfunction
+
 " }}}
 
 " vim: foldmethod=marker

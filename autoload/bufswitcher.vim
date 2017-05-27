@@ -68,6 +68,19 @@ endfunction
 
 " Show and hide buffer list {{{
 
+" Start bufswitching.
+function! bufswitcher#start()
+  if bufswitcher#is_shown()
+    return
+  endif
+
+  let bufnrs = bufswitcher#lister#list(g:bufswitcher_configs)
+  let buflister = bufswitcher#new_buflister('Bufs', bufnrs)
+  if !empty(buflister)
+    call bufswitcher#show(buflister)
+  endif
+endfunction
+
 " Show buffers which belong to the specified group.
 " If group name is omitted, show 'g:bufswitcher_config.current_group'.
 function! bufswitcher#show_group(...)

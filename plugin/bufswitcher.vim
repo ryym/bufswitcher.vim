@@ -22,13 +22,16 @@ endif
 
 let g:bufswitcher_configs = extend({
   \   'current_group' : 'listed',
+  \   'listed': 1,
+  \   'order': 'bufnr',
   \ }, g:bufswitcher_configs)
 
 " }}}
 
 " Commands {{{
 
-command -nargs=? BufswitcherShow call bufswitcher#show_group(<f-args>)
+" command -nargs=? BufswitcherShow call bufswitcher#show_group(<f-args>)
+command BufswitcherShow call bufswitcher#start()
 command BufswitcherHide call bufswitcher#hide()
 
 command -nargs=+ BufswitcherExec call bufswitcher#action#execute(<f-args>)
