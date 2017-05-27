@@ -29,6 +29,14 @@ highlight link BufswitcherSelected   Search
 
 " }}}
 
+" Setup {{{
+
+function! bufswitcher#setup()
+  call bufswitcher#lister#setup()
+endfunction
+
+" }}}
+
 " Buflister object {{{
 
 " Buflister is an object which has some informations and functions

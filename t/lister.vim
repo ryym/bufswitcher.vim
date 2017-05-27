@@ -4,7 +4,7 @@ describe 'Lister'
   describe '#normalize_conf'
     it 'sets default value to required keys'
       let conf = bufswitcher#lister#normalize_conf({ 'listed': 1 })
-      Expect conf == { 'listed': 1, 'order': 'bufnr' }
+      Expect conf == { 'listed': 1, 'per_tab': 0, 'order': 'bufnr' }
     end
   end
 
@@ -33,6 +33,19 @@ describe 'Lister'
 
       let bufnrs = s:run_list({ 'listed': 1 })
       Expect bufnrs == [bufs[1].bufnr, bufs[2].bufnr]
+    end
+
+    it 'can list buffers in current tab only'
+      let bufs = s:prepare_buffers([
+        \ { 'listed': 0 },
+        \ { 'listed': 1 },
+        \ { 'run': 'tabnew' },
+        \ { 'listed': 1 },
+        \ { 'listed': 0 },
+        \ ])
+
+      let bufnrs = s:run_list({ 'per_tab': 1 })
+      Expect bufnrs == [bufs[2].bufnr, bufs[3].bufnr]
     end
   end
 end

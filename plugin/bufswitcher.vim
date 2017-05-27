@@ -23,8 +23,15 @@ endif
 let g:bufswitcher_configs = extend({
   \   'current_group' : 'listed',
   \   'listed': 1,
+  \   'per_tab': 1,
   \   'order': 'bufnr',
   \ }, g:bufswitcher_configs)
+
+" }}}
+
+" Setup {{{
+
+call bufswitcher#setup()
 
 " }}}
 
