@@ -27,41 +27,24 @@ describe 'Basic functions:'
     call g:Utils.wipeout_all(s:tmp_bufnrs)
   end
 
-
-  describe '#show_group()'
-    it 'changes the current group'
-      let g:bufswitcher_configs.current_group = 'listed'
-      call bufswitcher#show_group('all')
-
-      Expect g:bufswitcher_configs.current_group ==# 'all'
-    end
-
-    it 'shows buffers which belong to the specified group'
+  describe '#start()'
+    it 'starts buffer switching'
       let prev_statusline = 'previous-statusline'
       let &l:statusline = prev_statusline
-      call bufswitcher#show_group('listed')
+      call bufswitcher#start()
 
       Expect bufswitcher#is_shown() to_be_true
       Expect &l:statusline not ==# prev_statusline
-      Expect g:bufswitcher_configs.current_group ==# 'listed'
-    end
-
-    it 'shows buffers of current group if group is not specified'
-      let g:bufswitcher_configs.current_group = 'listed'
-      call bufswitcher#show_group()
-
-      Expect bufswitcher#is_shown() to_be_true
-      Expect g:bufswitcher_configs.current_group ==# 'listed'
     end
 
     it 'does nothing if the buffer list is already opened'
-      call bufswitcher#show_group()
+      call bufswitcher#start()
       Expect bufswitcher#is_shown() to_be_true
 
       let another_bufnr = s:open_new_buffer('b1', '')
       silent execute 'buffer' another_bufnr
       let &l:statusline = 'another-buffer-statusline'
-      call bufswitcher#show_group()
+      call bufswitcher#start()
 
       Expect &l:statusline ==# 'another-buffer-statusline'
     end
@@ -70,7 +53,7 @@ describe 'Basic functions:'
   describe '#hide()'
     it 'restores statusline'
       let &l:statusline = 'prev-statusline'
-      call bufswitcher#show_group()
+      call bufswitcher#start()
 
       call bufswitcher#hide()
       Expect bufswitcher#is_shown() to_be_false
@@ -80,7 +63,7 @@ describe 'Basic functions:'
     it 'restores statusline even if it opened in another buffer'
       let &l:statusline   = 'prev-statusline'
       let current_bufnr = bufnr('%')
-      call bufswitcher#show_group()
+      call bufswitcher#start()
 
       let bufnr = s:open_new_buffer('b', '')
       silent execute 'buffer' bufnr
@@ -95,7 +78,7 @@ describe 'Basic functions:'
 
     it 'will be called automatically on the specific events'
       function s:should_be_called_on(event_name)
-        call bufswitcher#show_group()
+        call bufswitcher#start()
         Expect bufswitcher#is_shown() to_be_true
         silent execute 'doautocmd bufswitcher' a:event_name
         Expect bufswitcher#is_shown() to_be_false

@@ -81,21 +81,6 @@ function! bufswitcher#start()
   endif
 endfunction
 
-" Show buffers which belong to the specified group.
-" If group name is omitted, show 'g:bufswitcher_config.current_group'.
-function! bufswitcher#show_group(...)
-  if bufswitcher#is_shown()
-    return
-  endif
-  let group = get(a:, '1', g:bufswitcher_configs.current_group)
-
-  let buflister = bufswitcher#group#get_buflister_from(group)
-  if ! empty(buflister)
-    call bufswitcher#show(buflister)
-    call bufswitcher#group#change_current_group(group)
-  endif
-endfunction
-
 " Show buffer list.
 function! bufswitcher#show(buflister)
   call bufswitcher#_put_new_states(a:buflister)

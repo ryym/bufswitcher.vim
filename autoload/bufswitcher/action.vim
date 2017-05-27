@@ -13,7 +13,7 @@ function! bufswitcher#action#execute(action, ...)
     return
   endif
 
-  call bufswitcher#show_group()
+  call bufswitcher#start()
   let buflister = deepcopy( bufswitcher#_get_states().buflister )
   let options   = s:make_exe_options()
   let args      = extend([buflister, options], a:000)
