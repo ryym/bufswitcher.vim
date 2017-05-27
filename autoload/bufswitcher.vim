@@ -117,6 +117,17 @@ function! bufswitcher#hide()
     autocmd!
   augroup END
   call bufswitcher#_destroy_states()
+
+  for F in s:bufswitcher_on_hide
+    call F(current_bufnr)
+  endfor
+endfunction
+
+let s:bufswitcher_on_hide = []
+
+" Register a handler called when buffer list disappears.
+function! bufswitcher#on_hide(func)
+  call add(s:bufswitcher_on_hide, a:func)
 endfunction
 
 " Return non-zero if buffer list is shown in statusline.
