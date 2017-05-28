@@ -9,4 +9,4 @@ script:
 notifications:
   on_sart: never
   on_success: never
-  on_failure: never
+  on_failure: always
