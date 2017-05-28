@@ -1,0 +1,12 @@
+language: generic
+
+before_script:
+  - git clone --depth 1 --single-branch https://github.com/kana/vim-vspec /tmp/vim-vspec
+  - vim --version
+
+script:
+  - /tmp/vim-vspec/bin/prove-vspec -d . t
+notifications:
+  on_sart: never
+  on_success: never
+  on_failure: never
