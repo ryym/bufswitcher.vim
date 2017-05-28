@@ -15,8 +15,7 @@ function! bufswitcher#action#execute(action, ...)
 
   call bufswitcher#start()
   let buflister = deepcopy( bufswitcher#_get_states().buflister )
-  let options   = s:make_exe_options()
-  let args      = extend([buflister, options], a:000)
+  let args      = extend([buflister], a:000)
   let Action    = actions[a:action]
 
   let new_buflister = call(Action, args, actions)
@@ -54,10 +53,6 @@ function! bufswitcher#action#update(buflister)
   call states.skip_next_autoclose()
 endfunction
 
-function! s:make_exe_options()
-  return {}
-endfunction
-
 " }}}
 
 " Default actions {{{
@@ -67,7 +62,7 @@ let bufswitcher#action#actions = {}
 let s:actions = bufswitcher#action#actions
 
 " Open the specified buffer. It continues showing buffer list.
-function! s:actions.switch_to(buflister, options, idx_or_bufnr) dict
+function! s:actions.switch_to(buflister, idx_or_bufnr) dict
   let bufnr = g:bufswitcher_configs.show_index
     \ ? a:buflister.bufnrs[a:idx_or_bufnr - 1]
     \ : a:idx_or_bufnr
@@ -76,28 +71,28 @@ function! s:actions.switch_to(buflister, options, idx_or_bufnr) dict
 endfunction
 
 " Go to previous buffer in buffer list.
-function! s:actions.go_prev(buflister, options)
+function! s:actions.go_prev(buflister)
   let prev_bufnr = a:buflister.get_next_bufnr(-1)
   call a:buflister.select(prev_bufnr)
   return a:buflister
 endfunction
 
 " Go to previous buffer in buffer list.
-function! s:actions.go_next(buflister, options)
+function! s:actions.go_next(buflister)
   let next_bufnr = a:buflister.get_next_bufnr(1)
   call a:buflister.select(next_bufnr)
   return a:buflister
 endfunction
 
 " Go to first buffer in buffer list.
-function! s:actions.go_first(buflister, options)
+function! s:actions.go_first(buflister)
   let first_bufnr = a:buflister.bufnrs[0]
   call a:buflister.select(first_bufnr)
   return a:buflister
 endfunction
 
 " Go to last buffer in buffer list.
-function! s:actions.go_last(buflister, options)
+function! s:actions.go_last(buflister)
   let last_bufnr = a:buflister.bufnrs[-1]
   call a:buflister.select(last_bufnr)
   return a:buflister

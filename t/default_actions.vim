@@ -18,10 +18,10 @@ describe 'Default actions'
     it 'selects to the specified buffer'
       let buflister = s:make_test_buflister([1, 2, 3], 1)
 
-      let new_buflister = s:actions.switch_to(buflister, {}, 3)
+      let new_buflister = s:actions.switch_to(buflister, 3)
       Expect new_buflister.selected_nr == 3
 
-      let new_buflister = s:actions.switch_to(buflister, {}, 2)
+      let new_buflister = s:actions.switch_to(buflister, 2)
       Expect new_buflister.selected_nr == 2
     end
   end
@@ -30,10 +30,10 @@ describe 'Default actions'
     it 'selects the previous buffer'
       let buflister = s:make_test_buflister([1, 2, 3], 3)
 
-      let buflister = s:actions.go_prev(buflister, {})
+      let buflister = s:actions.go_prev(buflister)
       Expect buflister.selected_nr == 2
 
-      let buflister = s:actions.go_prev(buflister, {})
+      let buflister = s:actions.go_prev(buflister)
       Expect buflister.selected_nr == 1
     end
   end
@@ -42,10 +42,10 @@ describe 'Default actions'
     it 'selects the next buffer'
       let buflister = s:make_test_buflister([1, 2, 3], 1)
 
-      let buflister = s:actions.go_next(buflister, {})
+      let buflister = s:actions.go_next(buflister)
       Expect buflister.selected_nr == 2
 
-      let buflister = s:actions.go_next(buflister, {})
+      let buflister = s:actions.go_next(buflister)
       Expect buflister.selected_nr == 3
     end
   end
@@ -54,7 +54,7 @@ describe 'Default actions'
     it 'selects the first buffer'
       let buflister = s:make_test_buflister([1, 2, 3], 3)
 
-      let buflister = s:actions.go_first(buflister, {})
+      let buflister = s:actions.go_first(buflister)
       Expect buflister.selected_nr == 1
     end
   end
@@ -63,7 +63,7 @@ describe 'Default actions'
     it 'selects the next buffer'
       let buflister = s:make_test_buflister([1, 2, 3], 1)
 
-      let buflister = s:actions.go_last(buflister, {})
+      let buflister = s:actions.go_last(buflister)
       Expect buflister.selected_nr == 3
     end
   end

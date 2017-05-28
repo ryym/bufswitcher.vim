@@ -7,7 +7,7 @@ let s:this_bufnr = bufnr('%')
 describe 'action executor'
   describe '#action#execute()'
     before
-      function! g:bufswitcher#action#actions.test(buflister, options, ...)
+      function! g:bufswitcher#action#actions.test(buflister, ...)
         let g:W.test_called = 1
         let g:W.test_args = a:000
         let a:buflister.is_updated = 1
