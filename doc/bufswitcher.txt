@@ -82,6 +82,7 @@ COMMANDS						*bufswitcher-commands*
 
 :BufswitcherShow					*:BufswitcherShow*
 		Display buffer list in statusline.
+		Note that bufswitcher shows part of buffers if buffers are too many.
 		You can configure how to display buffers by |g:bufswitcher_configs|.
 
 :BufswitcherHide					*:BufswitcherHide*

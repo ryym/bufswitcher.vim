@@ -183,6 +183,8 @@ function! bufswitcher#make_statusline(buflister)
   let selected_nr = a:buflister.selected_nr
   let line = ''
 
+  let max_chars = winwidth('%') - 10
+  let chars = 0
   let idx = 0
   for bufnr in a:buflister.bufnrs
     let idx += 1
@@ -192,11 +194,17 @@ function! bufswitcher#make_statusline(buflister)
     endif
     let is_selected_nr = (selected_nr == bufnr)
 
-    let key = g:bufswitcher_configs.show_index ? idx : bufnr
-    let line .= '%#BufswitcherBufId# ' . key . ' %#BufswitcherBackGround#'
+    let key = '  ' . (g:bufswitcher_configs.show_index ? idx : bufnr) . ' '
+    let buf = ' ' . buffer_name . (getbufvar(bufnr, '&modified') ? '[+]' : '') . ' '
+    let chars += len(key) + len(buf)
+    if max_chars < chars
+      let line .= '...'
+      break
+    endif
+
+    let line .= '%#BufswitcherBufId#' . key . '%#BufswitcherBackGround#'
     let line .= (is_selected_nr ? '%#BufswitcherSelected#' : '%#BufswitcherBufName#')
-    let line .= ' ' . buffer_name . (getbufvar(bufnr, '&modified') ? '[+]' : '') . ' '
-    let line .= '%#BufswitcherBackGround#  '
+    let line .= buf . '%#BufswitcherBackGround#'
   endfor
 
   return line
