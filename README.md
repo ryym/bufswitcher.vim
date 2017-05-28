@@ -1,5 +1,9 @@
 # bufswitcher.vim - Instant buffer switcher
 
+[![Build Status][travis-svg]](https://travis-ci.org/ryym/bufswitcher.vim)
+
+[travis-svg]: https://travis-ci.org/ryym/bufswitcher.vim.svg?branch=master
+
 bufswitcher.vim is a Vim plugin to switch buffers instantly using statusline.
 This plugin shows buffer list in statusline only while switching buffers.
 This means you can use this plugin with any other plugins which customize
