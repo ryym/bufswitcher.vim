@@ -46,6 +46,7 @@ command BufswitcherPrev  BufswitcherExec go_prev
 command BufswitcherNext  BufswitcherExec go_next
 command BufswitcherFirst BufswitcherExec go_first
 command BufswitcherLast  BufswitcherExec go_last
+command -nargs=1 BufswitcherSwitchTo BufswitcherExec switch_to <args>
 
 " }}}
 

@@ -103,6 +103,11 @@ COMMANDS						*bufswitcher-commands*
 :BufswitcherLast					*:BufswitcherLast*
 		Go to last buffer in buffer list.
 
+:BufswitcherSwitchTo					*:BufswitcherSwitchTo*
+		Go to the buffer of specified bufnr.
+		If |g:bufswitcher_configs.show_index| is non-zero, you need
+		to specify the index number instead of 'bufnr'.
+
 :BufswitcherExec {action} [{arg}..]			*:BufswitcherExec*
 		Execute the specified action. See |bufswitcher-actions| for
 		actions.
@@ -170,9 +175,7 @@ Default actions~
 		Go to last buffer in buffer list.
 
 .switch_to({bufnr_or_index})			*bufswitcher-actions-switch_to*
-		Open a buffer of the specified number.
-		If |g:bufswitcher_configs.show_index| is non-zero, you need
-		to specify the index instead of 'bufnr'.
+		Go to the specified buffer.
 
 
 ==============================================================================
