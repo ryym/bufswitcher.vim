@@ -3,7 +3,7 @@ runtime vspecrc.vim
 let s:actions = bufswitcher#action#actions
 
 function s:make_test_buflister(bufnrs, selected_nr)
-  let buflister = bufswitcher#new_buflister([])
+  let buflister = bufswitcher#new_buflist([])
   let buflister.selected_nr = a:selected_nr
   let buflister.bufnrs = a:bufnrs
   for bufnr in a:bufnrs

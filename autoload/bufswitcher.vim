@@ -36,27 +36,27 @@ endfunction
 
 " }}}
 
-" Buflister object {{{
+" Buflist object {{{
 
-" Buflister is an object which has some informations and functions
+" Buflist is an object which has some informations and functions
 " to display buffer list in statusline.
-let s:Buflister = {}
+let s:Buflist = {}
 
 " Select the specified buffer number.
-function! s:Buflister.select(bufnr) dict
+function! s:Buflist.select(bufnr) dict
   let self.selected_nr = a:bufnr
 endfunction
 
 " Return a bufnr which is ahead of or behind the currently selected one
 " by the specified number of indexes.
-function! s:Buflister.get_next_bufnr(step) dict
+function! s:Buflist.get_next_bufnr(step) dict
   let current_nr_idx = index(self.bufnrs, self.selected_nr)
   let next_nr_idx    = (current_nr_idx + a:step) % len(self.bufnrs)
   return self.bufnrs[next_nr_idx]
 endfunction
 
-" Create a new Buflister object.
-function! bufswitcher#new_buflister(bufnrs, ...)
+" Create a new Buflist object.
+function! bufswitcher#new_buflist(bufnrs, ...)
   let bufnames = {}
   for bufnr in filter(a:bufnrs, 'bufexists(v:val)')
     let bufnames[bufnr] = fnamemodify(bufname(bufnr), ':t')
@@ -67,7 +67,7 @@ function! bufswitcher#new_buflister(bufnrs, ...)
     \ 'bufnrs'      : a:bufnrs,
     \ 'bufnames'    : bufnames,
     \ 'selected_nr' : selected_nr
-    \ }, s:Buflister)
+    \ }, s:Buflist)
 endfunction
 
 " }}}
@@ -81,7 +81,7 @@ function! bufswitcher#start()
   endif
 
   let bufnrs = bufswitcher#lister#list(g:bufswitcher_configs)
-  let buflister = bufswitcher#new_buflister(bufnrs)
+  let buflister = bufswitcher#new_buflist(bufnrs)
   if !empty(buflister)
     call bufswitcher#show(buflister)
   endif

@@ -25,7 +25,7 @@ function! bufswitcher#action#execute(action, ...)
   endif
 endfunction
 
-" Update statusline by the specified Buflister.
+" Update statusline by the specified Buflist.
 " If the selected bufnr is changed, switch to the buffer.
 function! bufswitcher#action#update(buflister)
   let states  = bufswitcher#_get_states()

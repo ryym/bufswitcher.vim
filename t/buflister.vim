@@ -13,7 +13,7 @@ function s:open_open_new_buffers(n_buffers)
 endfunction
 
 
-describe 'Buflister'
+describe 'Buflist'
   before
     let s:bufnrs = []
   end
@@ -27,7 +27,7 @@ describe 'Buflister'
     it 'has fields used to write statusline'
       let this_bufnr   = bufnr('%')
       let this_bufname = fnamemodify(bufname('%'), ':t')
-      let buflister    = bufswitcher#new_buflister([this_bufnr], this_bufnr)
+      let buflister    = bufswitcher#new_buflist([this_bufnr], this_bufnr)
 
       Expect buflister.bufnrs == [this_bufnr]
       Expect buflister.bufnames[this_bufnr] ==# this_bufname
@@ -37,10 +37,10 @@ describe 'Buflister'
     it 'selects the current bufnr by default'
       let this_bufnr = bufnr('%')
 
-      let buflister = bufswitcher#new_buflister([this_bufnr])
+      let buflister = bufswitcher#new_buflist([this_bufnr])
       Expect buflister.selected_nr == this_bufnr
 
-      let buflister = bufswitcher#new_buflister([this_bufnr], -100)
+      let buflister = bufswitcher#new_buflist([this_bufnr], -100)
       Expect buflister.selected_nr == this_bufnr
     end
   end
@@ -48,7 +48,7 @@ describe 'Buflister'
   describe '.get_next_bufnr()'
     it 'returns a bufnr which is ahead of the current one'
       let bufnrs    = s:open_open_new_buffers(3)
-      let buflister = bufswitcher#new_buflister(bufnrs, bufnrs[0])
+      let buflister = bufswitcher#new_buflist(bufnrs, bufnrs[0])
       Expect buflister.bufnrs == bufnrs
       Expect buflister.get_next_bufnr(1) == bufnrs[1]
       Expect buflister.get_next_bufnr(2) == bufnrs[2]
@@ -58,7 +58,7 @@ describe 'Buflister'
 
     it 'returns a bufnr which is behind the current one'
       let bufnrs    = s:open_open_new_buffers(3)
-      let buflister = bufswitcher#new_buflister(bufnrs, bufnrs[2])
+      let buflister = bufswitcher#new_buflist(bufnrs, bufnrs[2])
       Expect buflister.bufnrs == bufnrs
       Expect buflister.get_next_bufnr(-1) == bufnrs[1]
       Expect buflister.get_next_bufnr(-2) == bufnrs[0]

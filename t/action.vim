@@ -32,7 +32,7 @@ describe 'action executor'
       Expect bufswitcher#is_shown() to_be_true
     end
 
-    it 'updates buffer list by Buflister the action returns'
+    it 'updates buffer list by Buflist the action returns'
       call bufswitcher#action#execute('test')
       Expect bufswitcher#_get_states().buflister.is_updated to_be_true
     end
@@ -47,7 +47,7 @@ describe 'action executor'
         \ ]
       silent execute 'buffer' s:this_bufnr
 
-      let s:current_buflister = bufswitcher#new_buflister(bufnrs, bufnrs[0])
+      let s:current_buflister = bufswitcher#new_buflist(bufnrs, bufnrs[0])
       let &l:statusline = 'prev-statusline'
       call bufswitcher#show(s:current_buflister)
     end
