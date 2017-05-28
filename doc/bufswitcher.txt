@@ -1,6 +1,6 @@
 *bufswitcher.txt*	Easy buffer switcher using statusline
 
-Version: 0.1.0
+Version: 0.2.0
 Author: ryym <ryym64@gmail.com>
 
 ==============================================================================
@@ -190,6 +190,11 @@ For example, the following mappings allow you to open buffer list by
 
 ==============================================================================
 CHAGNELOG						*bufswitcher-changelog*
+
+0.2.0   2017-05-28
+	- Enable to configure buffer list more flexibly.
+	- Add "per_tab", "order" and "show_index" options.
+	- Remove Japanese document.
 
 0.1.0	2015-08-08
 	- Buffer list can be opened only in one buffer.
