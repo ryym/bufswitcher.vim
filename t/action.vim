@@ -47,7 +47,7 @@ describe 'action executor'
         \ ]
       silent execute 'buffer' s:this_bufnr
 
-      let s:current_buflister = bufswitcher#new_buflister('test', bufnrs, bufnrs[0])
+      let s:current_buflister = bufswitcher#new_buflister(bufnrs, bufnrs[0])
       let &l:statusline = 'prev-statusline'
       call bufswitcher#show(s:current_buflister)
     end

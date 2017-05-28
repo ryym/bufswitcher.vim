@@ -22,7 +22,6 @@ endfunction
 
 " Default highlights settings.
 highlight      BufswitcherBackGround guifg=gray guibg=black
-highlight link BufswitcherTitle      Title
 highlight link BufswitcherBufNumber  CursorLineNr
 highlight link BufswitcherBufName    Normal
 highlight link BufswitcherSelected   Search
@@ -57,7 +56,7 @@ function! s:Buflister.get_next_bufnr(step) dict
 endfunction
 
 " Create a new Buflister object.
-function! bufswitcher#new_buflister(title, bufnrs, ...)
+function! bufswitcher#new_buflister(bufnrs, ...)
   let bufnames = {}
   for bufnr in filter(a:bufnrs, 'bufexists(v:val)')
     let bufnames[bufnr] = fnamemodify(bufname(bufnr), ':t')
@@ -65,7 +64,6 @@ function! bufswitcher#new_buflister(title, bufnrs, ...)
 
   let selected_nr = (a:0 == 1 && bufexists(a:1)) ? a:1 : bufnr('%')
   return extend({
-    \ 'title'       : a:title,
     \ 'bufnrs'      : a:bufnrs,
     \ 'bufnames'    : bufnames,
     \ 'selected_nr' : selected_nr
@@ -83,7 +81,7 @@ function! bufswitcher#start()
   endif
 
   let bufnrs = bufswitcher#lister#list(g:bufswitcher_configs)
-  let buflister = bufswitcher#new_buflister('Bufs', bufnrs)
+  let buflister = bufswitcher#new_buflister(bufnrs)
   if !empty(buflister)
     call bufswitcher#show(buflister)
   endif
@@ -183,7 +181,7 @@ endfunction
 " Create the string to be set to statusline based on the 'buflister'.
 function! bufswitcher#make_statusline(buflister)
   let selected_nr = a:buflister.selected_nr
-  let line = '%#BufswitcherTitle#' . a:buflister.title . ' :%#BufswitcherBackGround#'
+  let line = ''
 
   let idx = 0
   for bufnr in a:buflister.bufnrs
