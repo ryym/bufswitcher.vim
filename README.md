@@ -1,9 +1,9 @@
 # bufswitcher.vim - Instant buffer switcher
 
 bufswitcher.vim is a Vim plugin to switch buffers instantly using statusline.
-This plugin allows you to display buffer names in statusline while you want to.
-By displaying buffer list only while switching buffers, you can use this plugin with
-any other plugins which customize statusline.  
+This plugin shows buffer list in statusline only while switching buffers.
+This means you can use this plugin with any other plugins which customize
+statusline.
 
 ![Switching buffers](screenshots/switching.gif)
 
