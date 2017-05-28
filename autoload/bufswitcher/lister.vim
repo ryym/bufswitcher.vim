@@ -18,7 +18,7 @@ function! bufswitcher#lister#list(raw_conf)
   let bufnrs = filter(range(1, bufnr('$')), is_target)
 
   let s:order = conf.order
-  return sort(bufnrs, funcref('s:compare_bufs', [conf.order]))
+  return sort(bufnrs, function('s:compare_bufs'))
 endfunction
 
 function! bufswitcher#lister#normalize_conf(raw_conf)
@@ -34,8 +34,8 @@ function! bufswitcher#lister#normalize_conf(raw_conf)
   return conf
 endfunction
 
-function! s:compare_bufs(order, a, b)
-  if a:order == 'recent'
+function! s:compare_bufs(a, b)
+  if s:order == 'recent'
     let times = g:bufswitcher_buf_enter_times
     let at = has_key(times, a:a) ? times[a:a] : 0
     let bt = has_key(times, a:b) ? times[a:b] : 0
@@ -53,7 +53,7 @@ function! bufswitcher#lister#setup()
     autocmd BufWinEnter * call <SID>touch_buf()
   augroup END
 
-  call bufswitcher#on_hide(funcref('s:touch_buf'))
+  call bufswitcher#on_hide(function('<SNR>' . s:SID() . '_touch_buf'))
 endfunction
 
 function! s:add_tabbuf()
@@ -80,4 +80,8 @@ function! s:touch_buf(...)
   let entered = s:last_entered + 1
   let g:bufswitcher_buf_enter_times[bufnr] = entered
   let s:last_entered = entered
+endfunction
+
+function! s:SID()
+  return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
 endfunction
