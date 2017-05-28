@@ -1,6 +1,6 @@
 *bufswitcher.txt*	Easy buffer switcher using statusline
 
-Version: 0.2.0
+Version: 0.2.1
 Author: ryym <ryym64@gmail.com>
 
 ==============================================================================
@@ -194,6 +194,11 @@ For example, the following mappings allow you to open buffer list by
 
 ==============================================================================
 CHAGNELOG						*bufswitcher-changelog*
+
+0.2.1   2017-05-28
+	- Refactor
+	- Add "BufswitcherSwitchTo" command.
+	- Adjust buffer list size to window width.
 
 0.2.0   2017-05-28
 	- Enable to configure buffer list more flexibly.
