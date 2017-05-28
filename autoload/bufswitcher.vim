@@ -22,7 +22,7 @@ endfunction
 
 " Default highlights settings.
 highlight      BufswitcherBackGround guifg=gray guibg=black
-highlight link BufswitcherBufNumber  CursorLineNr
+highlight link BufswitcherBufId      CursorLineNr
 highlight link BufswitcherBufName    Normal
 highlight link BufswitcherSelected   Search
 
@@ -193,7 +193,7 @@ function! bufswitcher#make_statusline(buflister)
     let is_selected_nr = (selected_nr == bufnr)
 
     let key = g:bufswitcher_configs.show_index ? idx : bufnr
-    let line .= '%#BufswitcherBufNumber# ' . key . ' %#BufswitcherBackGround#'
+    let line .= '%#BufswitcherBufId# ' . key . ' %#BufswitcherBackGround#'
     let line .= (is_selected_nr ? '%#BufswitcherSelected#' : '%#BufswitcherBufName#')
     let line .= ' ' . buffer_name . (getbufvar(bufnr, '&modified') ? '[+]' : '') . ' '
     let line .= '%#BufswitcherBackGround#  '
