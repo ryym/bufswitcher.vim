@@ -38,15 +38,15 @@ call bufswitcher#setup()
 " Commands {{{
 
 " command -nargs=? BufswitcherShow call bufswitcher#show_group(<f-args>)
-command BufswitcherShow call bufswitcher#start()
-command BufswitcherHide call bufswitcher#hide()
+command! BufswitcherShow call bufswitcher#start()
+command! BufswitcherHide call bufswitcher#hide()
 
-command -nargs=+ BufswitcherExec call bufswitcher#action#execute(<f-args>)
-command BufswitcherPrev  BufswitcherExec go_prev
-command BufswitcherNext  BufswitcherExec go_next
-command BufswitcherFirst BufswitcherExec go_first
-command BufswitcherLast  BufswitcherExec go_last
-command -nargs=1 BufswitcherSwitchTo BufswitcherExec switch_to <args>
+command! -nargs=+ BufswitcherExec call bufswitcher#action#execute(<f-args>)
+command! BufswitcherPrev  BufswitcherExec go_prev
+command! BufswitcherNext  BufswitcherExec go_next
+command! BufswitcherFirst BufswitcherExec go_first
+command! BufswitcherLast  BufswitcherExec go_last
+command! -nargs=1 BufswitcherSwitchTo BufswitcherExec switch_to <args>
 
 " }}}
 
